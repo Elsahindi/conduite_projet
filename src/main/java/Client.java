@@ -19,12 +19,12 @@ public class Client extends User{
 
     public void login(String id, String pswd){
         String selectSql = "SELECT * FROM client WHERE id =" + id + "AND pswd =" + pswd + "AND facility=" + facility;
-        try (DatabaseCreation.ResultSet resultSet = stmt.executeQuery(selectSql) ) {
-            if (selectSql != NULL){
-                System.out.println("User does exist");
+        //try (DatabaseCreation.ResultSet resultSet = stmt.executeQuery(selectSql) ) {
+            if (selectSql != "NULL"){
+                System.out.println("User does not exist");
             }
             else {
-                System.out.println("User does not exist");
+                System.out.println("User does exist");
             }
         }
     };
