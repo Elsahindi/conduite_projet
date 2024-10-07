@@ -14,6 +14,6 @@ public class Validator extends User{
     }
 
 
-    public void login(){};
+    public void login(String id, String pswd, String facility){};
 
 }

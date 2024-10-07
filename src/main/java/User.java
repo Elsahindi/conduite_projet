@@ -11,7 +11,7 @@ abstract class User {
         this.pswd = pswd;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
