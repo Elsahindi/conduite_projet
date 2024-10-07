@@ -5,7 +5,7 @@ public class Volunteer extends User{
     }
 
 
-    public void login(String id, String pswd, String facility){
+    public void login(String id, String pswd){
 
     };
 
