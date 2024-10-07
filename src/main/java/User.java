@@ -1,4 +1,5 @@
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 abstract class User {
 
@@ -10,9 +11,17 @@ abstract class User {
         this.pswd = pswd;
     }
 
-    public void create_user(){
-        PreparedStatement statement = DatabaseCreation.getInstance().getConnector()
-                .
+    public int getId() {
+        return id;
+    }
+
+    public String getPswd() {
+        return pswd;
+    }
+
+    public void create_user() throws SQLException {
+        PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
+                .prepareStatement();
 
 
     }
