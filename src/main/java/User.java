@@ -11,7 +11,7 @@ abstract class User {
         this.pswd = pswd;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
@@ -19,13 +19,11 @@ abstract class User {
         return pswd;
     }
 
-    public void create_user() throws SQLException {
+    public void create_user(String id, String pswd) throws SQLException {
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
-                .prepareStatement();
-
+                .prepareStatement("INSERT INTO users (id, pswd)");
 
     }
 
     public abstract void login(String id, String pswd);
-
 }

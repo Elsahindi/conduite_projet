@@ -8,12 +8,12 @@ public class Validator extends User{
 
     private Facility2 facility;
 
-    public Validator(String id, String pswd, Facility2 facility) {
+    public Validator(String id, String pswd) {
         super(id,pswd);
         this.facility = facility;
     }
 
 
-    public void login(){};
+    public void login(String id, String pswd){};
 
 }
