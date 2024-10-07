@@ -2,10 +2,10 @@ import java.sql.PreparedStatement;
 
 abstract class User {
 
-    public int id;
+    public String id;
     public String pswd;
 
-    public User(int id, String pswd) {
+    public User(String id, String pswd) {
         this.id = id;
         this.pswd = pswd;
     }
@@ -17,6 +17,6 @@ abstract class User {
 
     }
 
-    public abstract void login();
+    public abstract void login(String id, String pswd);
 
 }

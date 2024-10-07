@@ -8,7 +8,7 @@ public class Validator extends User{
 
     private Facility2 facility;
 
-    public Validator(int id, String pswd, Facility2 facility) {
+    public Validator(String id, String pswd, Facility2 facility) {
         super(id,pswd);
         this.facility = facility;
     }

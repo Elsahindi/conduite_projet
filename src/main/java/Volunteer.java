@@ -1,6 +1,6 @@
 public class Volunteer extends User{
 
-    public Volunteer(int id, String pswd) {
+    public Volunteer(String id, String pswd) {
         super(id,pswd);
     }
 
