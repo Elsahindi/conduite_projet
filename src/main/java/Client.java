@@ -12,7 +12,7 @@ public class Client extends User{
 
     public Client(String id, String pswd, Facility facility) {
         super(id,pswd);
-        this.facility = facility;
+        this.facility = facility ;
     }
 
 
