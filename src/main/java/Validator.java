@@ -32,7 +32,7 @@ public class Validator extends User{
         statement.setString(1, id);
         statement.execute();
 
-        return new Validator(id,pswd,facility);
+        return new Validator(id,pswd,facility) ;
 
     }
 
