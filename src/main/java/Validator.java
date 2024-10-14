@@ -25,6 +25,17 @@ public class Validator extends User{
         return new Validator(id,pswd,facility);
     }
 
+    public Validator getUser(String id) throws SQLException {
+        PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
+                .prepareStatement("SELECT * FROM user INNER JOIN validator ON user.id = validator.id WHERE id = ?");
+
+        statement.setString(1, id);
+        statement.execute();
+
+        return new Validator(id,pswd,facility);
+
+    }
+
     public void login(String id, String pswd){};
 
 }

@@ -25,6 +25,17 @@ public class Client extends User{
 
     }
 
+    public Client getUser(String id) throws SQLException {
+        PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
+                .prepareStatement("SELECT * FROM user WHERE id = ?");
+
+        statement.setString(1, id);
+        statement.execute();
+
+        return new Client(id,pswd,facility);
+
+    }
+
     public void login(String id, String pswd) {
     }
 

@@ -27,4 +27,15 @@ public class Volunteer extends User{
 
     }
 
+    public Volunteer getUser(String id) throws SQLException {
+        PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
+                .prepareStatement("SELECT * FROM user WHERE id = ?");
+
+        statement.setString(1, id);
+        statement.execute();
+
+        return new Volunteer(id,pswd);
+
+    }
+
 }

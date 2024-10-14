@@ -30,5 +30,8 @@ abstract class User {
         statement.execute();
     }
 
+    public abstract User getUser(String id) throws SQLException;
+
+
     public abstract void login(String id, String pswd);
 }
