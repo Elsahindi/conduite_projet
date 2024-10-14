@@ -6,6 +6,6 @@ import java.sql.Statement;
 public class Main {
 
     public static void main(String[] args) throws SQLException {
-        Validator.createValidator("elsa-super-java", "romain-le-chien", Facilities.RETIREMENT);
+
     }
 }
