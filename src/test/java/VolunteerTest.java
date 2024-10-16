@@ -1,5 +1,8 @@
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -10,6 +13,17 @@ class VolunteerTest {
     @BeforeEach
     void setUp() {
         volunteer = new Volunteer("volunteerId", "volunteerPswd");
+    }
+
+    @AfterEach
+    void tearDown() throws SQLException {
+        PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
+                .prepareStatement("DELETE FROM user WHERE id=?");
+        statement.setString(1, "volunteerId");
+        statement.execute();
+
+        statement.setString(1, "newVolunteerId");
+        statement.execute();
     }
 
     @Test

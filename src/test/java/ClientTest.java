@@ -1,6 +1,9 @@
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,8 +17,14 @@ class ClientTest {
     }
 
     @AfterEach
-    void deleteFromDatabase() throws SQLException {
+    void tearDown() throws SQLException {
+        PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
+                .prepareStatement("DELETE FROM user WHERE id=?");
+        statement.setString(1, "clientId");
+        statement.execute();
 
+        statement.setString(1, "newClientId");
+        statement.execute();
     }
 
     @Test

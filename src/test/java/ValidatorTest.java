@@ -1,5 +1,8 @@
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -9,7 +12,18 @@ class ValidatorTest {
 
     @BeforeEach
     void setUp() {
-        validator = new Validator("clientId", "clientPswd", Facilities.HOSPITAL);
+        validator = new Validator("validatorId", "validatorPswd", Facilities.HOSPITAL);
+    }
+
+    @AfterEach
+    void tearDown() throws SQLException {
+        PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
+                .prepareStatement("DELETE FROM user WHERE id=?");
+        statement.setString(1, "validatorId");
+        statement.execute();
+
+        statement.setString(1, "elsa-super-java");
+        statement.execute();
     }
 
     @Test
