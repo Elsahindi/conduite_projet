@@ -27,12 +27,12 @@ public class Client extends User{
 
     public Client getUser(String id) throws SQLException {
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
-                .prepareStatement("SELECT * FROM user WHERE id = ?");
+                .prepareStatement("SELECT * FROM user INNER JOIN client ON user.id = client.id WHERE user.id = ?");
 
         statement.setString(1, id);
         statement.execute();
 
-        return new Client(id,pswd,facility);
+        return new Client(id,this.getPswd(),facility);
 
     }
 

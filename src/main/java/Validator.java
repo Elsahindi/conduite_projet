@@ -1,4 +1,5 @@
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Validator extends User{
@@ -10,32 +11,59 @@ public class Validator extends User{
         this.facility = facility;
     }
 
-
     public static Validator createValidator(String id, String pswd, Facilities facility) throws SQLException {
         User.createUser(id,pswd);
 
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
-                .prepareStatement("INSERT INTO validator (id,facility) VALUES (?,?)");
+                    .prepareStatement("INSERT INTO validator (id, facility) VALUES (?, ?)");
 
-        statement.setString(1, id);
-        statement.setString(2,facility.toString());
+            statement.setString(1, id);
+            statement.setString(2, facility.toString());
 
-        statement.execute();
+            statement.execute();
+        statement.close();
 
         return new Validator(id,pswd,facility);
     }
 
     public Validator getUser(String id) throws SQLException {
-        PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
-                .prepareStatement("SELECT * FROM user INNER JOIN validator ON user.id = validator.id WHERE id = ?");
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = DatabaseCreation.getInstance().getConnection()
+                    .prepareStatement("SELECT * FROM user INNER JOIN validator ON user.id = validator.id WHERE user.id = ?");
 
-        statement.setString(1, id);
-        statement.execute();
+            statement.setString(1, id);
+            resultSet = statement.executeQuery();
 
-        return new Validator(id,pswd,facility) ;
+            if (resultSet.next()) {
 
+                String pswd = resultSet.getString("pswd");
+
+                String facilityStr = resultSet.getString("facility");
+                Facilities facility = Facilities.valueOf(facilityStr.toUpperCase());
+
+
+                return new Validator(id, pswd, facility);
+            } else {
+                throw new SQLException("User not found");
+            }
+        } finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (statement != null) {
+                statement.close();
+            }
+        }
     }
 
     public void login(String id, String pswd){};
 
+    public Facilities getFacility() {
+        return facility;
+    }
 }
+
+
+

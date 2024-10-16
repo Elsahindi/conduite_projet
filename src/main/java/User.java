@@ -3,8 +3,8 @@ import java.sql.SQLException;
 
 abstract class User {
 
-    public String id;
-    public String pswd;
+    private String id;
+    private String pswd;
 
     public User(String id, String pswd) {
         this.id = id;

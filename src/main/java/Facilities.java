@@ -4,3 +4,4 @@ public enum Facilities {
     RETIREMENT(),
     SCHOOL()
 }
+

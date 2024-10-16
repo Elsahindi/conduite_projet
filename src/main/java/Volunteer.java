@@ -29,13 +29,15 @@ public class Volunteer extends User{
 
     public Volunteer getUser(String id) throws SQLException {
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
-                .prepareStatement("SELECT * FROM user WHERE id = ?");
+                .prepareStatement("SELECT * FROM user INNER JOIN volunteer ON user.id = volunteer.id WHERE user.id = ?");
 
         statement.setString(1, id);
         statement.execute();
 
-        return new Volunteer(id,pswd);
+        return new Volunteer(id,this.getPswd());
 
     }
 
 }
+
+
