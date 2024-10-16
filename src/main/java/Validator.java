@@ -3,7 +3,7 @@ import java.sql.SQLException;
 
 public class Validator extends User{
 
-    private Facilities facility;
+    public Facilities facility;
 
     public Validator(String id, String pswd, Facilities facility) {
         super(id,pswd);

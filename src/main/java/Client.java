@@ -3,7 +3,7 @@ import java.sql.*;
 public class Client extends User{
 
 
-    private Facilities facility;
+    public Facilities facility;
 
     public Client(String id, String pswd, Facilities facility) {
         super(id,pswd);
