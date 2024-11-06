@@ -3,14 +3,11 @@ import java.sql.SQLException;
 
 public class Volunteer extends User{
 
+    private int connected;
+
     public Volunteer(String id, String pswd) {
         super(id,pswd);
     }
-
-
-    public void login(String id, String pswd){
-
-    };
 
     public static Volunteer createVolunteer(String id, String pswd) throws SQLException {
 
@@ -37,6 +34,22 @@ public class Volunteer extends User{
         return new Volunteer(id,this.getPswd());
 
     }
+
+    public void login(String id, String pswd){
+
+        connected = 0;
+        try {
+            if (getUser(id).getId().equals(id)){
+                connected = 1;
+            }
+            else{
+                connected =0;
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+    };
 
 }
 
