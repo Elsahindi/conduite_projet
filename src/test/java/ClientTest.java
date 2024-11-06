@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ClientTest {
@@ -14,6 +16,13 @@ class ClientTest {
     @BeforeEach
     void setUp() throws SQLException {
         client = Client.createClient("clientId", "clientPswd", Facilities.HOSPITAL);
+
+        PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
+                .prepareStatement("INSERT INTO request (idSender, message, status) VALUES (?, ?, ?)");
+        statement.setString(1, "clientId");
+        statement.setString(2, "Demande de test");
+        statement.setString(3, "en attente");
+        statement.execute();
     }
 
     @AfterEach
@@ -24,6 +33,11 @@ class ClientTest {
         statement.execute();
 
         statement.setString(1, "newClientId");
+        statement.execute();
+
+        statement = DatabaseCreation.getInstance().getConnection()
+                .prepareStatement("DELETE FROM request WHERE idSender=?");
+        statement.setString(1, "clientId");
         statement.execute();
     }
 
@@ -57,5 +71,24 @@ class ClientTest {
     void login() {
         assertDoesNotThrow(() -> client.login("clientId", "clientPswd"));
         assertThrows(RuntimeException.class, () -> client.login("wrongId", "wrongPswd"));
+    }
+
+    @Test
+    void sendRequest() {
+    }
+
+    @Test
+    void getRequests() {
+        try {
+            List<Request> requests = client.getRequests();
+            assertNotNull(requests);
+            assertFalse(requests.isEmpty());
+            Request request = requests.get(0);
+            assertEquals("clientId", request.getIdSender());
+            assertEquals("Demande de test", request.getMessage());
+            assertEquals("en attente", request.getStatus());
+        } catch (SQLException e) {
+            fail("SQLException was thrown: " + e.getMessage());
+        }
     }
 }

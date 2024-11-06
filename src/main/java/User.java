@@ -1,5 +1,6 @@
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 
 abstract class User {
 
@@ -32,6 +33,7 @@ abstract class User {
 
     public abstract User getUser(String id) throws SQLException;
 
-
     public abstract void login(String id, String pswd);
+
+    public abstract List<Request> getRequests() throws SQLException;
 }
