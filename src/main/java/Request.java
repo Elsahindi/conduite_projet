@@ -8,6 +8,21 @@ public class Request {
 
     private String status;
 
+    public Request(String idSender, String message) {
+
+        this.idSender = idSender;
+        this.message = message;
+
+    }
+    public Request(String idSender, String message, String status, String idDestination) {
+
+        this.idSender = idSender;
+        this.message = message;
+        this.status = status;
+        this.idDestination = idDestination;
+
+    }
+
     public String getIdSender() {
         return idSender;
     }

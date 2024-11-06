@@ -70,4 +70,16 @@ public class Client extends User{
 
     }
 
+    public void sendRequest(String id, String message) throws SQLException {
+
+        PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
+                .prepareStatement("INSERT INTO request (id,message) VALUES (?,?)");
+
+        statement.setString(1, id);
+        statement.setString(2,message);
+
+        statement.execute();
+
+    }
+
 }
