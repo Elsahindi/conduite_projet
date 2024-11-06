@@ -11,8 +11,9 @@ class ValidatorTest {
     private Validator validator;
 
     @BeforeEach
-    void setUp() {
-        validator = new Validator("validatorId", "validatorPswd", Facilities.HOSPITAL);
+    void setUp() throws SQLException {
+        //validator = new Validator("validatorId", "validatorPswd", Facilities.HOSPITAL);
+        validator = Validator.createValidator("validatorId", "validatorPswd", Facilities.HOSPITAL);
     }
 
     @AfterEach
