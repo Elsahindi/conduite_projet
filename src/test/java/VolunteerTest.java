@@ -11,8 +11,9 @@ class VolunteerTest {
     private Volunteer volunteer;
 
     @BeforeEach
-    void setUp() {
-        volunteer = new Volunteer("volunteerId", "volunteerPswd");
+    void setUp() throws SQLException {
+        //volunteer = new Volunteer("volunteerId", "volunteerPswd");
+        volunteer = Volunteer.createVolunteer("volunteerId", "volunteerPswd");
     }
 
     @AfterEach

@@ -12,8 +12,8 @@ class ClientTest {
     private Client client;
 
     @BeforeEach
-    void setUp() {
-        client = new Client("clientId", "clientPswd", Facilities.HOSPITAL);
+    void setUp() throws SQLException {
+        client = Client.createClient("clientId", "clientPswd", Facilities.HOSPITAL);
     }
 
     @AfterEach
