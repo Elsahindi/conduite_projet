@@ -1,6 +1,8 @@
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Validator extends User{
 
@@ -73,6 +75,13 @@ public class Validator extends User{
     public Facilities getFacility() {
         return facility;
     }
+
+    @Override
+    // Ici on souhaite récuperer les requêtes lié à la facility du validator
+    public List<Request> getRequests() throws SQLException {
+        return null;
+    }
+
 }
 
 

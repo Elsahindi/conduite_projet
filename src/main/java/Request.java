@@ -1,12 +1,13 @@
 public class Request {
 
+    public enum Status {
+        EN_ATTENTE, VALIDEE, REALISEE
+    }
+
     private String idSender;
-
     private String idDestination;
-
     private String message;
-
-    private String status;
+    private Status status;
 
     public Request(String idSender, String message) {
 
@@ -14,7 +15,7 @@ public class Request {
         this.message = message;
 
     }
-    public Request(String idSender, String message, String status, String idDestination) {
+    public Request(String idSender, String message, Status status, String idDestination) {
 
         this.idSender = idSender;
         this.message = message;
@@ -47,11 +48,11 @@ public class Request {
         this.message = message;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

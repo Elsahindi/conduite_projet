@@ -1,6 +1,8 @@
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Volunteer extends User{
 
@@ -63,8 +65,25 @@ public class Volunteer extends User{
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     };
+
+    @Override
+    // Récupère les requête dont l'iD destination est l'iD du volunteer
+    public List<Request> getRequests() throws SQLException {
+        PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
+                .prepareStatement("SELECT * FROM request WHERE idDestination = ?");
+        statement.setString(1, getId());
+        ResultSet resultSet = statement.executeQuery();
+
+        List<Request> requests = new ArrayList<>();
+        while (resultSet.next()) {
+            requests.add(new Request(resultSet.getString("idSender"),
+                    resultSet.getString("message"),
+                    Request.Status.valueOf(resultSet.getString("status").toUpperCase()),
+                    resultSet.getString("idDestination")));
+        }
+        return requests;
+    }
 
 }
 

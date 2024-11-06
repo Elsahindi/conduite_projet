@@ -1,4 +1,6 @@
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Client extends User{
 
@@ -97,5 +99,25 @@ public class Client extends User{
         //liste de demandes
 
     }
+
+    @Override
+    public List<Request> getRequests() throws SQLException {
+        // On cherche ici la liste des requêtes liés au Client
+        PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
+                .prepareStatement("SELECT * FROM request WHERE request.idSender = ?");
+        statement.setString(1, getId());
+        ResultSet resultSet = statement.executeQuery();
+
+        // On crée ici une liste qui contient les requêtes des clients
+        List<Request> requests = new ArrayList<>();
+        while (resultSet.next()) {
+            requests.add(new Request(resultSet.getString("idSender"),
+                    resultSet.getString("message"),
+                    Request.Status.valueOf(resultSet.getString("status").toUpperCase()),
+                    resultSet.getString("idDestination")));
+            }
+        return requests;
+    }
+
 
 }
