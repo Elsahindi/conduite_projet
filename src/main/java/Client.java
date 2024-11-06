@@ -11,6 +11,20 @@ public class Client extends User{
     }
 
     public static Client createClient(String id, String pswd, Facilities facility) throws SQLException {
+
+        // Vérifier si l'identifiant existe déjà dans la base de données
+
+        PreparedStatement checkStatement = DatabaseCreation.getInstance().getConnection()
+                .prepareStatement("SELECT COUNT(*) FROM client WHERE id = ?");
+        checkStatement.setString(1, id);
+        ResultSet resultSet = checkStatement.executeQuery();
+
+        if (resultSet.next() && resultSet.getInt(1) > 0) {
+            throw new SQLException("User" + id + "already exists");
+
+        }
+        // Si l'identifiant n'existe pas, on continue avec la création du client
+
         User.createUser(id,pswd);
 
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
