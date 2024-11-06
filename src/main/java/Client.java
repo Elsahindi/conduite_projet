@@ -28,14 +28,36 @@ public class Client extends User{
     }
 
     public Client getUser(String id) throws SQLException {
-        PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
-                .prepareStatement("SELECT * FROM user INNER JOIN client ON user.id = client.id WHERE user.id = ?");
 
-        statement.setString(1, id);
-        statement.execute();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = DatabaseCreation.getInstance().getConnection()
+                    .prepareStatement("SELECT * FROM user INNER JOIN client ON user.id = client.id WHERE user.id = ?");
 
-        return new Client(id,this.getPswd(),facility);
+            statement.setString(1, id);
+            resultSet = statement.executeQuery();
 
+            if (resultSet.next()) {
+
+                String pswd = resultSet.getString("pswd");
+
+                String facilityStr = resultSet.getString("facility");
+                Facilities facility = Facilities.valueOf(facilityStr.toUpperCase());
+
+
+                return new Client(id,this.getPswd(),facility);
+            } else {
+                throw new SQLException("User not found");
+            }
+        } finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (statement != null) {
+                statement.close();
+            }
+        }
     }
 
     public void login(String id, String pswd) {

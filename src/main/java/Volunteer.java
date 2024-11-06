@@ -1,4 +1,5 @@
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Volunteer extends User{
@@ -25,14 +26,36 @@ public class Volunteer extends User{
     }
 
     public Volunteer getUser(String id) throws SQLException {
-        PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
-                .prepareStatement("SELECT * FROM user INNER JOIN volunteer ON user.id = volunteer.id WHERE user.id = ?");
 
-        statement.setString(1, id);
-        statement.execute();
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            statement = DatabaseCreation.getInstance().getConnection()
+                    .prepareStatement("SELECT * FROM user INNER JOIN volunteer ON user.id = volunteer.id WHERE user.id = ?");
 
-        return new Volunteer(id,this.getPswd());
+            statement.setString(1, id);
+            resultSet = statement.executeQuery();
 
+            if (resultSet.next()) {
+
+                String pswd = resultSet.getString("pswd");
+
+                String facilityStr = resultSet.getString("facility");
+                Facilities facility = Facilities.valueOf(facilityStr.toUpperCase());
+
+
+                return new Volunteer(id,this.getPswd());
+            } else {
+                throw new SQLException("User not found");
+            }
+        } finally {
+            if (resultSet != null) {
+                resultSet.close();
+            }
+            if (statement != null) {
+                statement.close();
+            }
+        }
     }
 
     public void login(String id, String pswd){
