@@ -5,8 +5,6 @@ public class Client extends User{
 
     public Facilities facility;
 
-    private int connected = 0;
-
     public Client(String id, String pswd, Facilities facility) {
         super(id,pswd);
         this.facility = facility ;
@@ -61,13 +59,10 @@ public class Client extends User{
     }
 
     public void login(String id, String pswd) {
-        connected = 0;
+        int connected = 0;
         try {
             if (getUser(id).getId().equals(id)){
                 connected = 1;
-            }
-            else{
-                connected =0;
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -8,11 +8,11 @@ public class Main {
     public static void main(String[] args) {
         try {
             // Create a new validator and user in the database
-            Validator newValidator = Validator.createValidator("test_user", "password123", Facilities.SCHOOL);
+            Validator newValidator = Validator.createValidator("test_user2", "password1234", Facilities.SCHOOL);
             System.out.println("Validator created: " + newValidator.getId() + ", Facility: " + newValidator.facility);
 
             // Retrieve the validator from the database by id
-            Validator fetchedValidator = newValidator.getUser("test_user");
+            Validator fetchedValidator = newValidator.getUser("test_user2");
             System.out.println("Fetched Validator: " + fetchedValidator.getId() + ", Facility: " + fetchedValidator.facility);
 
         } catch (SQLException e) {

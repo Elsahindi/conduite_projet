@@ -4,8 +4,6 @@ import java.sql.SQLException;
 
 public class Volunteer extends User{
 
-    private int connected;
-
     public Volunteer(String id, String pswd) {
         super(id,pswd);
     }
@@ -40,10 +38,6 @@ public class Volunteer extends User{
 
                 String pswd = resultSet.getString("pswd");
 
-                String facilityStr = resultSet.getString("facility");
-                Facilities facility = Facilities.valueOf(facilityStr.toUpperCase());
-
-
                 return new Volunteer(id,this.getPswd());
             } else {
                 throw new SQLException("User not found");
@@ -60,14 +54,12 @@ public class Volunteer extends User{
 
     public void login(String id, String pswd){
 
-        connected = 0;
+        int connected = 0;
         try {
             if (getUser(id).getId().equals(id)){
                 connected = 1;
             }
-            else{
-                connected =0;
-            }
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
