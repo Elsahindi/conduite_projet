@@ -80,6 +80,8 @@ public class Client extends User{
 
         statement.execute();
 
+        //liste de demandes
+
     }
 
 }
