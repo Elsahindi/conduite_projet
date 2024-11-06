@@ -61,7 +61,7 @@ public class Client extends User{
     public void login(String id, String pswd) {
         int connected = 0;
         try {
-            if (getUser(id).getId().equals(id)){
+            if (getUser(id).getId().equals(id)) {
                 connected = 1;
             }
         } catch (SQLException e) {
@@ -69,6 +69,5 @@ public class Client extends User{
         }
 
     }
-
 
 }
