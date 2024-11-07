@@ -55,5 +55,8 @@ public class Request {
         this.status = status;
     }
 
+    public void setFacility(Facilities facility) { this.facility = facility; }
+
+    public Facilities getFacility() { return facility; }
 
 }

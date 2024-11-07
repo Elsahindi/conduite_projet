@@ -86,6 +86,7 @@ class ClientTest {
             Request request = requests.get(0);
             assertEquals("clientId", request.getIdSender());
             assertEquals("Demande de test", request.getMessage());
+            //assertEquals("", request.getFacility());
             assertEquals("en attente", request.getStatus());
         } catch (SQLException e) {
             fail("SQLException was thrown: " + e.getMessage());
