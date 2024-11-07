@@ -6,16 +6,18 @@ public class Request {
     private Status status;
     private Facilities facility;
 
-    public Request(String idSender, String message) {
+    public Request(String idSender, String message, Facilities facility) {
 
         this.idSender = idSender;
         this.message = message;
+        this.facility = facility;
 
     }
-    public Request(String idSender, String message, Status status, String idDestination) {
+    public Request(String idSender, String message, Facilities facility, Status status, String idDestination) {
 
         this.idSender = idSender;
         this.message = message;
+        this.facility = facility;
         this.status = status;
         this.idDestination = idDestination;
 
