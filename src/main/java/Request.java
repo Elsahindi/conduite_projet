@@ -57,6 +57,6 @@ public class Request {
 
     public void setFacility(Facilities facility) { this.facility = facility; }
 
-    public Facilities getFacility() { return facility; }
+    public Facilities getFacility() { return facility;}
 
 }
