@@ -113,7 +113,7 @@ public class Client extends User{
         while (resultSet.next()) {
             requests.add(new Request(resultSet.getString("idSender"),
                     resultSet.getString("message"),
-                    Request.Status.valueOf(resultSet.getString("status").toUpperCase()),
+                    Status.valueOf(resultSet.getString("status").toUpperCase()),
                     resultSet.getString("idDestination")));
             }
         return requests;

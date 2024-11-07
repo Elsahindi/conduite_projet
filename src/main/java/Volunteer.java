@@ -85,7 +85,7 @@ public class Volunteer extends User{
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("SELECT * FROM request WHERE status = ?");
 
-        statement.setString(1, Request.Status.EN_ATTENTE.name()); // Statut "en attente" (à ajuster si nécessaire)
+        statement.setString(1, Status.WAITING.name()); // Statut "en attente" (à ajuster si nécessaire)
 
         // Exécution de la requête
         ResultSet resultSet = statement.executeQuery();
@@ -95,7 +95,7 @@ public class Volunteer extends User{
         while (resultSet.next()) {
             requests.add(new Request(resultSet.getString("idSender"),
                     resultSet.getString("message"),
-                    Request.Status.valueOf(resultSet.getString("status").toUpperCase()),
+                    Status.valueOf(resultSet.getString("status").toUpperCase()),
                     resultSet.getString("idDestination")));
         }
 
@@ -114,7 +114,7 @@ public class Volunteer extends User{
         while (resultSet.next()) {
             requests.add(new Request(resultSet.getString("idSender"),
                     resultSet.getString("message"),
-                    Request.Status.valueOf(resultSet.getString("status").toUpperCase()),
+                    Status.valueOf(resultSet.getString("status").toUpperCase()),
                     resultSet.getString("idDestination")));
         }
         return requests;

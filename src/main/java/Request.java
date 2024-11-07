@@ -1,13 +1,10 @@
 public class Request {
 
-    public enum Status {
-        EN_ATTENTE, VALIDEE, REALISEE
-    }
-
     private String idSender;
     private String idDestination;
     private String message;
     private Status status;
+    private Facilities facility;
 
     public Request(String idSender, String message) {
 
