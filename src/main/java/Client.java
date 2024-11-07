@@ -116,6 +116,7 @@ public class Client extends User{
                     Facilities.valueOf(resultSet.getString("facility").toUpperCase()),
                     Status.valueOf(resultSet.getString("status").toUpperCase()),
                     resultSet.getString("idDestination")));
+
             }
         return requests;
     }
