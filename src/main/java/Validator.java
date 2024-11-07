@@ -14,6 +14,19 @@ public class Validator extends User{
     }
 
     public static Validator createValidator(String id, String pswd, Facilities facility) throws SQLException {
+
+        // Vérifier si l'identifiant existe déjà dans la base de données
+
+        PreparedStatement checkStatement = DatabaseCreation.getInstance().getConnection()
+                .prepareStatement("SELECT COUNT(*) FROM validator WHERE id = ?");
+        checkStatement.setString(1, id);
+        ResultSet resultSet = checkStatement.executeQuery();
+
+        if (resultSet.next() && resultSet.getInt(1) > 0) {
+            throw new SQLException("User" + id + "already exists");
+
+        }
+
         User.createUser(id,pswd);
 
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()

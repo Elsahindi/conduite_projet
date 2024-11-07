@@ -12,6 +12,17 @@ public class Volunteer extends User{
 
     public static Volunteer createVolunteer(String id, String pswd) throws SQLException {
 
+        // Vérifier si l'identifiant existe déjà dans la base de données
+
+        PreparedStatement checkStatement = DatabaseCreation.getInstance().getConnection()
+                .prepareStatement("SELECT COUNT(*) FROM volunteer WHERE id = ?");
+        checkStatement.setString(1, id);
+        ResultSet resultSet = checkStatement.executeQuery();
+
+        if (resultSet.next() && resultSet.getInt(1) > 0) {
+            throw new SQLException("User" + id + "already exists");
+
+        }
         User.createUser(id,pswd);
 
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
@@ -67,6 +78,30 @@ public class Volunteer extends User{
         }
     };
 
+
+    public List<Request> seeAllRequests() throws SQLException {
+
+        // Requête SQL pour récupérer les demandes dont le statut est "en attente"
+        PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
+                .prepareStatement("SELECT * FROM request WHERE status = ?");
+
+        statement.setString(1, Request.Status.EN_ATTENTE.name()); // Statut "en attente" (à ajuster si nécessaire)
+
+        // Exécution de la requête
+        ResultSet resultSet = statement.executeQuery();
+
+        // Liste des requêtes à renvoyer
+        List<Request> requests = new ArrayList<>();
+        while (resultSet.next()) {
+            requests.add(new Request(resultSet.getString("idSender"),
+                    resultSet.getString("message"),
+                    Request.Status.valueOf(resultSet.getString("status").toUpperCase()),
+                    resultSet.getString("idDestination")));
+        }
+
+        return requests;
+
+    }
     @Override
     // Récupère les requête dont l'iD destination est l'iD du volunteer
     public List<Request> getRequests() throws SQLException {
