@@ -81,11 +81,11 @@ public class Volunteer extends User{
 
     public List<Request> seeAllRequests() throws SQLException {
 
-        // Requête SQL pour récupérer les demandes dont le statut est "en attente"
+        // Requête SQL pour récupérer les demandes dont le statut est "VALIDATED"
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("SELECT * FROM request WHERE status = ?");
 
-        statement.setString(1, Status.WAITING.name()); // Statut "en attente" (à ajuster si nécessaire)
+        statement.setString(1, Status.VALIDATED.name());
 
         // Exécution de la requête
         ResultSet resultSet = statement.executeQuery();
@@ -95,6 +95,7 @@ public class Volunteer extends User{
         while (resultSet.next()) {
             requests.add(new Request(resultSet.getString("idSender"),
                     resultSet.getString("message"),
+                    Facilities.valueOf(resultSet.getString("facilities").toUpperCase()),
                     Status.valueOf(resultSet.getString("status").toUpperCase()),
                     resultSet.getString("idDestination")));
         }
@@ -114,6 +115,7 @@ public class Volunteer extends User{
         while (resultSet.next()) {
             requests.add(new Request(resultSet.getString("idSender"),
                     resultSet.getString("message"),
+                    Facilities.valueOf(resultSet.getString("facilities").toUpperCase()),
                     Status.valueOf(resultSet.getString("status").toUpperCase()),
                     resultSet.getString("idDestination")));
         }
