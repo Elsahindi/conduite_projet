@@ -18,10 +18,11 @@ class ClientTest {
         client = Client.createClient("clientId", "clientPswd", Facilities.HOSPITAL);
 
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
-                .prepareStatement("INSERT INTO request (idSender, message, status) VALUES (?, ?, ?)");
+                .prepareStatement("INSERT INTO request (idSender, message, facility, status) VALUES (?, ?, ?, ?)");
         statement.setString(1, "clientId");
         statement.setString(2, "Demande de test");
-        statement.setString(3, "en attente");
+        statement.setString(3, "HOSPITAL");
+        statement.setString(4, "WAITING");
         statement.execute();
     }
 
@@ -86,8 +87,8 @@ class ClientTest {
             Request request = requests.get(0);
             assertEquals("clientId", request.getIdSender());
             assertEquals("Demande de test", request.getMessage());
-            //assertEquals("", request.getFacility());
-            assertEquals("en attente", request.getStatus());
+            assertEquals(Facilities.HOSPITAL, request.getFacility());
+            assertEquals(Status.WAITING, request.getStatus());
         } catch (SQLException e) {
             fail("SQLException was thrown: " + e.getMessage());
         }
