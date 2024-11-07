@@ -86,22 +86,22 @@ public class Client extends User{
 
     }
 
-    public void sendRequest(String id, String message) throws SQLException {
+    public static void sendRequest(Request request) throws SQLException {
 
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
-                .prepareStatement("INSERT INTO request (id,message) VALUES (?,?)");
+                .prepareStatement("INSERT INTO request (idSender,message,facility) VALUES (?,?,?)");
 
-        statement.setString(1, id);
-        statement.setString(2,message);
+        statement.setString(1, request.getIdSender());
+        statement.setString(2, request.getMessage());
+        statement.setString(3, request.getFacility().toString());
 
         statement.execute();
-
-        //liste de demandes
 
     }
 
     @Override
     public List<Request> getRequests() throws SQLException {
+
         // On cherche ici la liste des requêtes liés au Client
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("SELECT * FROM request WHERE request.idSender = ?");
