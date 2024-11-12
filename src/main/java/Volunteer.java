@@ -36,7 +36,7 @@ public class Volunteer extends User{
 
     }
 
-    public Volunteer getUser(String id) throws SQLException {
+    public static Volunteer getUser(String id) throws SQLException {
 
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -51,7 +51,7 @@ public class Volunteer extends User{
 
                 String pswd = resultSet.getString("pswd");
 
-                return new Volunteer(id,this.getPswd());
+                return new Volunteer(id,pswd);
             } else {
                 throw new SQLException("User not found");
             }
@@ -65,17 +65,18 @@ public class Volunteer extends User{
         }
     }
 
-    public void login(String id, String pswd){
+    public int login(String id, String pswd){
 
         int connected = 0;
         try {
-            if (getUser(id).getId().equals(id)){
+            if (getUser(id).getId().equals(id) && getUser(id).getPswd().equals(pswd)){
                 connected = 1;
             }
 
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return connected;
     };
 
 

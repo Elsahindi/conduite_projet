@@ -59,4 +59,8 @@ public class Request {
 
     public Facilities getFacility() { return facility;}
 
+    public String toString() {
+        return "identifiant de l'envoyeur : " + getIdSender() + " A destination de : " + getIdDestination() + " Message : " + getMessage() + " Status : " + getStatus() + " Facility : " + getFacility();
+    }
+
 }

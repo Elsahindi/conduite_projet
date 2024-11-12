@@ -41,7 +41,7 @@ public class Client extends User{
 
     }
 
-    public Client getUser(String id) throws SQLException {
+    public static Client getUser(String id) throws SQLException {
 
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -60,7 +60,7 @@ public class Client extends User{
                 Facilities facility = Facilities.valueOf(facilityStr.toUpperCase());
 
 
-                return new Client(id,this.getPswd(),facility);
+                return new Client(id,pswd,facility);
             } else {
                 throw new SQLException("User not found");
             }
@@ -74,15 +74,12 @@ public class Client extends User{
         }
     }
 
-    public void login(String id, String pswd) {
+    public int login(String id, String pswd) {
         int connected = 0;
-        try {
-            if (getUser(id).getId().equals(id)) {
-                connected = 1;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        if (getId().equals(id) && getPswd().equals(pswd)) {
+            connected = 1;
         }
+        return connected;
 
     }
 
@@ -102,7 +99,7 @@ public class Client extends User{
     @Override
     public List<Request> getRequests() throws SQLException {
 
-        // On cherche ici la liste des requêtes liés au Client
+        // On cherche ici la liste des requêtes liées au Client
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("SELECT * FROM request WHERE request.idSender = ?");
         statement.setString(1, getId());
