@@ -76,7 +76,6 @@ class ClientTest {
     }
 
     @Test
-    // !!!!!!! JE L'AI FAIT SANS CO A LA BASE DE DONNEE DONC A TESTER
     void sendRequest() {
         try{
             String message = "Nouvelle demande pour validation";
