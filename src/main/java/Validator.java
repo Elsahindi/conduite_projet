@@ -13,6 +13,10 @@ public class Validator extends User{
         this.facility = facility;
     }
 
+    public Facilities getFacility() {
+        return facility;
+    }
+
     public static Validator createValidator(String id, String pswd, Facilities facility) throws SQLException {
 
         // Vérifier si l'identifiant existe déjà dans la base de données
@@ -86,10 +90,6 @@ public class Validator extends User{
         return connected;
     };
 
-    public Facilities getFacility() {
-        return facility;
-    }
-
     @Override
     // Ici on souhaite récuperer les requêtes lié à la facility du validator
     public List<Request> getRequests() throws SQLException {
@@ -105,7 +105,8 @@ public class Validator extends User{
         // Liste des requêtes à renvoyer
         List<Request> requests = new ArrayList<>();
         while (resultSet.next()) {
-            requests.add(new Request(resultSet.getString("idSender"),
+            requests.add(new Request(resultSet.getInt("idRequest"),
+                    resultSet.getString("idSender"),
                     resultSet.getString("message"),
                     Facilities.valueOf(resultSet.getString("facility").toUpperCase()),
                     Status.valueOf(resultSet.getString("status").toUpperCase()),

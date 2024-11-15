@@ -86,11 +86,14 @@ public class Client extends User{
     public static void sendRequest(Request request) throws SQLException {
 
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
-                .prepareStatement("INSERT INTO request (idSender,message,facility) VALUES (?,?,?)");
+                .prepareStatement("INSERT INTO request (idSender,message,facility) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
+
 
         statement.setString(1, request.getIdSender());
         statement.setString(2, request.getMessage());
         statement.setString(3, request.getFacility().toString());
+
+        // Récuperer l'id de la requete
 
         statement.execute();
 
@@ -108,7 +111,7 @@ public class Client extends User{
         // On crée ici une liste qui contient les requêtes des clients
         List<Request> requests = new ArrayList<>();
         while (resultSet.next()) {
-            requests.add(new Request(resultSet.getString("idSender"),
+            requests.add(new Request(resultSet.getInt("idRequest"),resultSet.getString("idSender"),
                     resultSet.getString("message"),
                     Facilities.valueOf(resultSet.getString("facility").toUpperCase()),
                     Status.valueOf(resultSet.getString("status").toUpperCase()),

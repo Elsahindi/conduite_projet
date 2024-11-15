@@ -12,7 +12,7 @@ public class Main {
             Volunteer newVolunteer = Volunteer.getUser("anyaa");
             Validator newValidator = Validator.getUser("testid");
             System.out.println("Validator created: " + newValidator.getId() + ", Facility: " + newValidator.facility);
-            Request request = new Request("MLAKii","coucou ca vaaa",Facilities.HOSPITAL);
+            Request request = new Request(1,"MLAKii","coucou ca vaaa",Facilities.HOSPITAL);
             Client.sendRequest(request);
             System.out.println("validator getrequest: " + newValidator.getRequests());
             System.out.println("client getrequest" + newClient.getRequests());

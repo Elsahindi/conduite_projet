@@ -94,7 +94,8 @@ public class Volunteer extends User{
         // Liste des requêtes à renvoyer
         List<Request> requests = new ArrayList<>();
         while (resultSet.next()) {
-            requests.add(new Request(resultSet.getString("idSender"),
+            requests.add(new Request(resultSet.getInt("idRequest"),
+                    resultSet.getString("idSender"),
                     resultSet.getString("message"),
                     Facilities.valueOf(resultSet.getString("facility").toUpperCase()),
                     Status.valueOf(resultSet.getString("status").toUpperCase()),
@@ -114,7 +115,8 @@ public class Volunteer extends User{
 
         List<Request> requests = new ArrayList<>();
         while (resultSet.next()) {
-            requests.add(new Request(resultSet.getString("idSender"),
+            requests.add(new Request(resultSet.getInt("idRequest"),
+                    resultSet.getString("idSender"),
                     resultSet.getString("message"),
                     Facilities.valueOf(resultSet.getString("facility").toUpperCase()),
                     Status.valueOf(resultSet.getString("status").toUpperCase()),

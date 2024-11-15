@@ -1,20 +1,23 @@
 public class Request {
 
+    private int idRequest;
     private String idSender;
     private String idDestination;
     private String message;
     private Status status;
     private Facilities facility;
 
-    public Request(String idSender, String message, Facilities facility) {
+    public Request(int idRequest, String idSender, String message, Facilities facility) {
 
+        this.idRequest = idRequest;
         this.idSender = idSender;
         this.message = message;
         this.facility = facility;
 
     }
-    public Request(String idSender, String message, Facilities facility, Status status, String idDestination) {
+    public Request(int idRequest, String idSender, String message, Facilities facility, Status status, String idDestination) {
 
+        this.idRequest = idRequest;
         this.idSender = idSender;
         this.message = message;
         this.facility = facility;
@@ -22,6 +25,8 @@ public class Request {
         this.idDestination = idDestination;
 
     }
+
+    public int getIdRequest() {return idRequest;}
 
     public String getIdSender() {
         return idSender;
@@ -34,6 +39,8 @@ public class Request {
     public String getMessage() {
         return message;
     }
+
+    public void setIdRequest(int idRequest) {this.idRequest = idRequest;}
 
     public void setIdSender(String idSender) {
         this.idSender = idSender;
@@ -60,7 +67,7 @@ public class Request {
     public Facilities getFacility() { return facility;}
 
     public String toString() {
-        return "identifiant de l'envoyeur : " + getIdSender() + " A destination de : " + getIdDestination() + " Message : " + getMessage() + " Status : " + getStatus() + " Facility : " + getFacility();
+        return "numéro de la requete : " + getIdRequest() + "identifiant de l'envoyeur : " + getIdSender() + " A destination de : " + getIdDestination() + " Message : " + getMessage() + " Status : " + getStatus() + " Facility : " + getFacility();
     }
 
 }
