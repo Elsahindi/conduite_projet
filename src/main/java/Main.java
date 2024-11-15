@@ -17,8 +17,6 @@ public class Main {
             System.out.println("client getrequest" + newClient.getRequests());
             System.out.println("volunteer getrequest" + newVolunteer.getRequests());
 
-
-
             // Retrieve the validator from the database by id
             Validator fetchedValidator = newValidator.getUser("test_user2");
             System.out.println("Fetched Validator: " + fetchedValidator.getId() + ", Facility: " + fetchedValidator.facility);
