@@ -1,8 +1,10 @@
+import java.io.ObjectInputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Validator extends User{
 
@@ -95,9 +97,10 @@ public class Validator extends User{
     public List<Request> getRequests() throws SQLException {
         // Requête SQL pour récupérer les demandes dont le statut est "en attente"
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
-                .prepareStatement("SELECT * FROM request WHERE facility = ?");
+                .prepareStatement("SELECT * FROM request WHERE facility = ? AND status = ?");
 
         statement.setString(1,getFacility().toString()); // en fonction de la facility du validator
+        statement.setString(2, String.valueOf(Status.WAITING));
 
         // Exécution de la requête
         ResultSet resultSet = statement.executeQuery();
@@ -116,6 +119,27 @@ public class Validator extends User{
         return requests;
     }
 
+    public void Validate() throws Exception {
+        List<Request> Requests = getRequests();
+        if (!Requests.isEmpty()) {
+            for (Request r : Requests) {
+                System.out.println("\n The request is: " + r.toString());
+                Scanner scanner = new Scanner(System.in);
+                System.out.println("\n Do you want to validate this request? y/n");
+                String response = scanner.nextLine();
+                if (response.equals("y")) {
+                    r.setStatus(Status.VALIDATED);
+                } else if (response.equals("n")) {
+                    r.setStatus(Status.REJECTED);
+                } else {
+                    throw new Exception("The response should be y or n");
+                }
+            }
+        }
+        else{
+            System.out.println("There is no Request to validate");
+        }
+    }
 }
 
 

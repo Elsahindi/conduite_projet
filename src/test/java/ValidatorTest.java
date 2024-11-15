@@ -66,7 +66,7 @@ class ValidatorTest {
         try {
             List<Request> requests = validator.getRequests();
             assertNotNull(requests);
-            if (requests.isEmpty() == false) {
+            if (!requests.isEmpty()) {
                 Request request = requests.get(0);
                 assertEquals(Facilities.HOSPITAL, request.getFacility());
             };
