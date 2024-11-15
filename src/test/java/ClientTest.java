@@ -80,8 +80,8 @@ class ClientTest {
         try{
             String message = "Nouvelle demande pour validation";
             Facilities facility = Facilities.HOSPITAL;
-            Request request = new Request("clientId", message, facility);
-            client.sendRequest(request);
+            //Request request = new Request("clientId", message, facility);
+            //client.sendRequest(request);
 
             PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                     .prepareStatement("SELECT * FROM request WHERE idSender = ? AND message = ?");

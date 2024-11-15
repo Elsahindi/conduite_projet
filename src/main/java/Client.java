@@ -87,20 +87,22 @@ public class Client extends User{
         return connected;
     }
 
-    public static void sendRequest(Request request) throws SQLException {
+    public static Request sendRequest(String idSender, String message, Facilities facility) throws SQLException {
 
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("INSERT INTO request (idSender,message,facility) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
-
-        statement.setString(1, request.getIdSender());
-        statement.setString(2, request.getMessage());
-        statement.setString(3, request.getFacility().toString());
-
-        // Récuperer l'id de la requete
+        statement.setString(1, idSender);
+        statement.setString(2, message);
+        statement.setString(3, facility.toString());
 
         statement.execute();
 
+
+        // Récuperer l'id de la requete
+        int idRequest = statement.getGeneratedKeys().getInt(1);
+
+        return Request.createRequest(idRequest,idSender, message, facility);
     }
 
     @Override

@@ -1,6 +1,6 @@
 public class Request {
 
-    private int idRequest;
+    private Integer idRequest;
     private String idSender;
     private String idDestination;
     private String message;
@@ -28,9 +28,7 @@ public class Request {
 
     public int getIdRequest() {return idRequest;}
 
-    public String getIdSender() {
-        return idSender;
-    }
+    public String getIdSender() {return idSender;}
 
     public String getIdDestination() {
         return idDestination;
@@ -66,6 +64,9 @@ public class Request {
 
     public Facilities getFacility() { return facility;}
 
+    public static Request createRequest(int idRequest, String idSender, String message, Facilities facility) {
+        return new Request(idRequest, idSender, message, facility);
+    }
     public String toString() {
         return "numéro de la requete : " + getIdRequest() + "identifiant de l'envoyeur : " + getIdSender() + " A destination de : " + getIdDestination() + " Message : " + getMessage() + " Status : " + getStatus() + " Facility : " + getFacility();
     }
