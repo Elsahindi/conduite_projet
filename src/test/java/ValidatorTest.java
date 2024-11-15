@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ValidatorTest {
@@ -60,10 +62,16 @@ class ValidatorTest {
     }
 
     @Test
-    void getFacility() {
-    }
-
-    @Test
     void getRequests() {
+        try {
+            List<Request> requests = validator.getRequests();
+            assertNotNull(requests);
+            if (requests.isEmpty() == false) {
+                Request request = requests.get(0);
+                assertEquals(Facilities.HOSPITAL, request.getFacility());
+            };
+        } catch (SQLException e) {
+            fail("SQLException was thrown: " + e.getMessage());
+        }
     }
 }

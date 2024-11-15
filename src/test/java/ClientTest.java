@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -76,6 +77,25 @@ class ClientTest {
 
     @Test
     void sendRequest() {
+        try{
+            String message = "Nouvelle demande pour validation";
+            Facilities facility = Facilities.HOSPITAL;
+            Request request = new Request("clientId", message, facility);
+            client.sendRequest(request);
+
+            PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
+                    .prepareStatement("SELECT * FROM request WHERE idSender = ? AND message = ?");
+            statement.setString(1, "clientId");
+            statement.setString(2, message);
+            ResultSet resultSet = statement.executeQuery();
+
+            assertTrue(resultSet.next(), "La requête n'a pas été enregistrée dans la base de données.");
+            assertEquals("clientId", resultSet.getString("idSender"));
+            assertEquals(message, resultSet.getString("message"));
+            assertEquals(facility.name(), resultSet.getString("facility"));
+            assertEquals("WAITING", resultSet.getString("status"));
+    } catch (SQLException e) {
+        fail("SQLException was thrown: " + e.getMessage());}
     }
 
     @Test

@@ -76,11 +76,15 @@ public class Client extends User{
 
     public int login(String id, String pswd) {
         int connected = 0;
-        if (getId().equals(id) && getPswd().equals(pswd)) {
-            connected = 1;
+        try {
+            if (getUser(id).getId().equals(id) && getUser(id).getPswd().equals(pswd)) {
+                connected = 1;
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         return connected;
-
     }
 
     public static void sendRequest(Request request) throws SQLException {
