@@ -14,7 +14,6 @@ class ValidatorTest {
 
     @BeforeEach
     void setUp() throws SQLException {
-        //validator = new Validator("validatorId", "validatorPswd", Facilities.HOSPITAL);
         validator = Validator.createValidator("validatorId", "validatorPswd", Facilities.HOSPITAL);
     }
 

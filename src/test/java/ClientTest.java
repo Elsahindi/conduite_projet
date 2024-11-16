@@ -1,4 +1,3 @@
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,17 +12,22 @@ import static org.junit.jupiter.api.Assertions.*;
 class ClientTest {
 
     private Client client;
+    private Client clientRequest;
+    private Volunteer destination;
 
     @BeforeEach
     void setUp() throws SQLException {
         client = Client.createClient("clientId", "clientPswd", Facilities.HOSPITAL);
-
+        clientRequest = Client.createClient("clientRequestId", "clientRequestPswd", Facilities.HOSPITAL);
+        destination = Volunteer.createVolunteer("destinationId", "DestinationPswd");
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
-                .prepareStatement("INSERT INTO request (idSender, message, facility, status) VALUES (?, ?, ?, ?)");
-        statement.setString(1, "clientId");
-        statement.setString(2, "Demande de test");
-        statement.setString(3, "HOSPITAL");
-        statement.setString(4, "WAITING");
+                .prepareStatement("INSERT INTO request (idRequest, idSender, idDestination, message, status, facility) VALUES (?, ?, ?, ?, ?, ?)");
+        statement.setInt(1, 1);
+        statement.setString(2, clientRequest.getId());
+        statement.setString(3, destination.getId());
+        statement.setString(4, "Demande de test");
+        statement.setString(5, "WAITING");
+        statement.setString(6, clientRequest.getFacility());
         statement.execute();
     }
 
@@ -37,9 +41,15 @@ class ClientTest {
         statement.setString(1, "newClientId");
         statement.execute();
 
+        statement.setString(1, "clientRequestId");
+        statement.execute();
+
+        statement.setString(1, "destinationId");
+        statement.execute();
+
         statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("DELETE FROM request WHERE idSender=?");
-        statement.setString(1, "clientId");
+        statement.setString(1, "clientRequestId");
         statement.execute();
     }
 
@@ -76,24 +86,24 @@ class ClientTest {
     }
 
     @Test
-    void sendRequest() {
+    void sendRequest() throws SQLException {
         try{
             String message = "Nouvelle demande pour validation";
             Facilities facility = Facilities.HOSPITAL;
-            //Request request = new Request("clientId", message, facility);
-            //client.sendRequest(request);
+            Client.sendRequest("clientId", message, facility);
 
             PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                     .prepareStatement("SELECT * FROM request WHERE idSender = ? AND message = ?");
             statement.setString(1, "clientId");
             statement.setString(2, message);
-            ResultSet resultSet = statement.executeQuery();
 
+            ResultSet resultSet = statement.executeQuery();
             assertTrue(resultSet.next(), "La requête n'a pas été enregistrée dans la base de données.");
             assertEquals("clientId", resultSet.getString("idSender"));
             assertEquals(message, resultSet.getString("message"));
             assertEquals(facility.name(), resultSet.getString("facility"));
             assertEquals("WAITING", resultSet.getString("status"));
+
     } catch (SQLException e) {
         fail("SQLException was thrown: " + e.getMessage());}
     }
@@ -101,11 +111,11 @@ class ClientTest {
     @Test
     void getRequests() {
         try {
-            List<Request> requests = client.getRequests();
+            List<Request> requests = clientRequest.getRequests();
             assertNotNull(requests);
             assertFalse(requests.isEmpty());
             Request request = requests.get(0);
-            assertEquals("clientId", request.getIdSender());
+            assertEquals("clientRequestId", request.getIdSender());
             assertEquals("Demande de test", request.getMessage());
             assertEquals(Facilities.HOSPITAL, request.getFacility());
             assertEquals(Status.WAITING, request.getStatus());

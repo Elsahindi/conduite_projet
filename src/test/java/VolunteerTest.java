@@ -16,15 +16,16 @@ class VolunteerTest {
     @BeforeEach
     void setUp() throws SQLException {
         volunteer = Volunteer.createVolunteer("volunteerId", "volunteerPswd");
-        client = Client.createClient("clientId", "clientPswd", Facilities.HOSPITAL);
+        client = Client.createClient("clientId", "clientPswd", Facilities.RETIREMENT);
 
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
-                .prepareStatement("INSERT INTO request (idSender, message, facility, status, idDestination) VALUES (?, ?, ?, ?, ?)");
-        statement.setString(1, "clientId");
-        statement.setString(2, "Demande pour volontaire");
-        statement.setString(3, "RETIREMENT");
-        statement.setString(4, "WAITING");
-        statement.setString(5, "volunteerId");
+                .prepareStatement("INSERT INTO request (idRequest, idSender, idDestination, message, status, facility) VALUES (?, ?, ?, ?, ?, ?)");
+        statement.setInt(1, 1);
+        statement.setString(2, client.getId());
+        statement.setString(3, volunteer.getId());
+        statement.setString(4, "Demande pour volontaire");
+        statement.setString(5, "WAITING");
+        statement.setString(6, client.getFacility());
         statement.execute();
     }
 

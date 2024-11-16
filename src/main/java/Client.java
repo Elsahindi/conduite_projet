@@ -12,6 +12,8 @@ public class Client extends User{
         this.facility = facility ;
     }
 
+    public String getFacility() { return facility.name(); }
+
     public static Client createClient(String id, String pswd, Facilities facility) throws SQLException {
 
         // Vérifier si l'identifiant existe déjà dans la base de données
@@ -88,21 +90,22 @@ public class Client extends User{
     }
 
     public static Request sendRequest(String idSender, String message, Facilities facility) throws SQLException {
-
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
-                .prepareStatement("INSERT INTO request (idSender,message,facility) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
+                .prepareStatement("INSERT INTO request (idSender, message, facility, status) VALUES (?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
         statement.setString(1, idSender);
         statement.setString(2, message);
         statement.setString(3, facility.toString());
+        statement.setString(4, Status.WAITING.toString());
 
-        statement.execute();
-
+        statement.executeUpdate();
 
         // Récuperer l'id de la requete
-        int idRequest = statement.getGeneratedKeys().getInt(1);
-
-        return Request.createRequest(idRequest,idSender, message, facility);
+        //int idRequest = statement.getGeneratedKeys().getInt(1);
+        ResultSet generatedKeys = statement.getGeneratedKeys();
+        // ici il faut prendre le next sinon on est pas dans le ResultSet
+        generatedKeys.next();
+        return Request.createRequest(generatedKeys.getInt(1), idSender, message, facility);
     }
 
     @Override
