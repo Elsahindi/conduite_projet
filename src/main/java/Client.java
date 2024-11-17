@@ -113,8 +113,9 @@ public class Client extends User{
 
         // On cherche ici la liste des requêtes liées au Client
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
-                .prepareStatement("SELECT * FROM request WHERE request.idSender = ?");
+                .prepareStatement("SELECT * FROM request WHERE request.idSender = ? AND NOT status = ?");
         statement.setString(1, getId());
+        statement.setString(2, Status.DONE.toString());
         ResultSet resultSet = statement.executeQuery();
 
         // On crée ici une liste qui contient les requêtes des clients
@@ -122,6 +123,8 @@ public class Client extends User{
         while (resultSet.next()) {
             requests.add(new Request(resultSet.getInt("idRequest"),resultSet.getString("idSender"),
                     resultSet.getString("message"),
+                    resultSet.getString("disaproval"),
+                    resultSet.getString("motif"),
                     Facilities.valueOf(resultSet.getString("facility").toUpperCase()),
                     Status.valueOf(resultSet.getString("status").toUpperCase()),
                     resultSet.getString("idDestination")));
@@ -129,6 +132,8 @@ public class Client extends User{
             }
         return requests;
     }
+
+
 
 
 }

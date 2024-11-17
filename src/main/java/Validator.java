@@ -100,7 +100,7 @@ public class Validator extends User{
                 .prepareStatement("SELECT * FROM request WHERE facility = ? AND status = ?");
 
         statement.setString(1,getFacility().toString()); // en fonction de la facility du validator
-        statement.setString(2, String.valueOf(Status.WAITING));
+        statement.setString(2, (String.valueOf(Status.WAITING)));
 
         // Exécution de la requête
         ResultSet resultSet = statement.executeQuery();
@@ -111,6 +111,8 @@ public class Validator extends User{
             requests.add(new Request(resultSet.getInt("idRequest"),
                     resultSet.getString("idSender"),
                     resultSet.getString("message"),
+                    resultSet.getString("disaproval"),
+                    resultSet.getString("motif"),
                     Facilities.valueOf(resultSet.getString("facility").toUpperCase()),
                     Status.valueOf(resultSet.getString("status").toUpperCase()),
                     resultSet.getString("idDestination")));
@@ -119,11 +121,15 @@ public class Validator extends User{
         return requests;
     }
 
-    public void Validate() throws Exception {
+    public void validate() throws Exception {
         List<Request> Requests = getRequests();
         if (!Requests.isEmpty()) {
             for (Request r : Requests) {
-                System.out.println("\n The request is: " + r.toString());
+                if (r.getStatus() == Status.VALIDATED) {
+                    System.out.println("\nThe request : " + r.toString() + " has already been approved .");
+                    continue;  // Passer à la requête suivante, sans la valider à nouveau
+                }
+                System.out.println("\n The request is : " + r.toString());
                 Scanner scanner = new Scanner(System.in);
                 System.out.println("\n Do you want to validate this request? y/n");
                 String response = scanner.nextLine();
@@ -131,6 +137,10 @@ public class Validator extends User{
                     r.setStatus(Status.VALIDATED);
                 } else if (response.equals("n")) {
                     r.setStatus(Status.REJECTED);
+                    Scanner scannerDisaproval = new Scanner(System.in);
+                    System.out.println("Please explain the reason behind your disaproval : ");
+                    String disaproval = scannerDisaproval.nextLine();
+                    r.setDisaproval(disaproval);
                 } else {
                     throw new Exception("The response should be y or n");
                 }
@@ -140,6 +150,8 @@ public class Validator extends User{
             System.out.println("There is no Request to validate");
         }
     }
+
+
 }
 
 

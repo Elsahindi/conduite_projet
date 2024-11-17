@@ -3,6 +3,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class Volunteer extends User{
 
@@ -86,7 +87,7 @@ public class Volunteer extends User{
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("SELECT * FROM request WHERE status = ?");
 
-        statement.setString(1, Status.WAITING.name()); // Statut "en attente" (à ajuster si nécessaire)
+        statement.setString(1, Status.VALIDATED.name()); // Statut "validée" par le validator
 
         // Exécution de la requête
         ResultSet resultSet = statement.executeQuery();
@@ -97,6 +98,8 @@ public class Volunteer extends User{
             requests.add(new Request(resultSet.getInt("idRequest"),
                     resultSet.getString("idSender"),
                     resultSet.getString("message"),
+                    resultSet.getString("disaproval"),
+                    resultSet.getString("motif"),
                     Facilities.valueOf(resultSet.getString("facility").toUpperCase()),
                     Status.valueOf(resultSet.getString("status").toUpperCase()),
                     resultSet.getString("idDestination")));
@@ -109,8 +112,9 @@ public class Volunteer extends User{
     // Récupère les requête dont l'iD destination est l'iD du volunteer
     public List<Request> getRequests() throws SQLException {
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
-                .prepareStatement("SELECT * FROM request WHERE idDestination = ?");
+                .prepareStatement("SELECT * FROM request WHERE idDestination = ? AND NOT status = ?");
         statement.setString(1, getId());
+        statement.setString(2, Status.DONE.name());
         ResultSet resultSet = statement.executeQuery();
 
         List<Request> requests = new ArrayList<>();
@@ -118,11 +122,37 @@ public class Volunteer extends User{
             requests.add(new Request(resultSet.getInt("idRequest"),
                     resultSet.getString("idSender"),
                     resultSet.getString("message"),
+                    resultSet.getString("disaproval"),
+                    resultSet.getString("motif"),
                     Facilities.valueOf(resultSet.getString("facility").toUpperCase()),
                     Status.valueOf(resultSet.getString("status").toUpperCase()),
                     resultSet.getString("idDestination")));
         }
         return requests;
+    }
+
+    //Permet au bénévole de choisir la requete qu'il souhaite accomplir
+    public void chooseRequest(){
+        try {
+            List<Request> liste = seeAllRequests();
+            for (Request request : liste) {
+                System.out.println("\n The request is : " + request.toString());
+                Scanner scanner = new Scanner(System.in);
+                System.out.println("\n Do you volunteer to handle this task? y/n");
+                String response = scanner.nextLine();
+                if (response.equals("y")) {
+                    request.setIdDestination(getId());
+                    request.setStatus(Status.ACCEPTED);
+                } else if (response.equals("n")) {
+                    request.setStatus(Status.VALIDATED);
+                } else {
+                    System.out.println("The response should be y or n");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
     }
 
 }
