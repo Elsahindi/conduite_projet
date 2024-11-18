@@ -21,19 +21,22 @@ class UserTest {
         validator = Validator.createValidator("validatorId", "validatorPswd", Facilities.HOSPITAL);
         volunteer = Volunteer.createVolunteer("volunteerId", "volunteerPswd");
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
-                .prepareStatement("INSERT INTO review (idAuthor, title, content) VALUES (?, ?, ?)");
-        statement.setString(1,validator.getId());
-        statement.setString(2,"Validator Review");
-        statement.setString(3,"This is the first review");
+                .prepareStatement("INSERT INTO review (idReview, idAuthor, title, content) VALUES (?, ?, ?, ?)");
+        statement.setInt(1,1);
+        statement.setString(2,validator.getId());
+        statement.setString(3,"Validator Review");
+        statement.setString(4,"This is the first review");
         statement.execute();
-        statement.setString(1, volunteer.getId());
-        statement.setString(2,"Volunteer Review");
-        statement.setString(3,"This is the second review");
+        statement.setInt(1,2);
+        statement.setString(2, volunteer.getId());
+        statement.setString(3,"Volunteer Review");
+        statement.setString(4,"This is the second review");
         statement.execute();
-//        statement.setString(1, volunteer.getId());
-//        statement.setString(2,"Volunteer Review bis");
-//        statement.setString(3,"This is the third review");
-//        statement.execute();
+        statement.setInt(1,3);
+        statement.setString(2, volunteer.getId());
+        statement.setString(3,"Volunteer Review bis");
+        statement.setString(4,"This is the third review");
+        statement.execute();
     }
 
     @AfterEach
@@ -68,7 +71,7 @@ class UserTest {
     void getReviews() throws SQLException {
         List<Review> reviews = User.getReviews();
         assertNotNull(reviews);
-        assertEquals(2, reviews.size());
+        assertEquals(3, reviews.size());
     }
 
     @Test
@@ -77,9 +80,9 @@ class UserTest {
         assertNotNull(ValidatorReviews);
         assertEquals(1, ValidatorReviews.size());
         assertEquals("validatorId", ValidatorReviews.get(0).getIdAuthor());
-//        List<Review> VolunteerReviews = validator.getMyReviews();
-//        assertNotNull(VolunteerReviews);
-//        assertEquals(2, VolunteerReviews.size());
-//        assertEquals("volunteerId", VolunteerReviews.get(0).getIdAuthor());
+        List<Review> VolunteerReviews = volunteer.getMyReviews();
+        assertNotNull(VolunteerReviews);
+        assertEquals(2, VolunteerReviews.size());
+        assertEquals("volunteerId", VolunteerReviews.get(0).getIdAuthor());
     }
 }

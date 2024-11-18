@@ -10,7 +10,7 @@ class ReviewTest {
         String title = "Test Review";
         String content = "This is a test of the reviewm creation method.";
 
-        Review review = Review.createReview(idAuthor, title, content);
+        Review review = Review.createReview(1, idAuthor, title, content);
 
         assertNotNull(review);
         assertEquals(idAuthor, review.getidAuthor());

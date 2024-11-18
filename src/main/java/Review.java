@@ -1,14 +1,20 @@
 public class Review {
 
+    private int idReview;
     private String idAuthor;
     private String title;
     private String content;
 
-    public Review(String idAuthor, String title, String content) {
+    public Review(int idReview, String idAuthor, String title, String content) {
+        this.idReview = idReview;
         this.idAuthor = idAuthor;
         this.title = title;
         this.content = content;
     }
+
+    public int getIdReview() { return idReview; }
+
+    public void setIdReview(int idReview) { this.idReview = idReview; }
 
     public String getidAuthor(){
         return idAuthor;
@@ -34,8 +40,8 @@ public class Review {
         this.content = content;
     }
 
-    public static Review createReview(String idAuthor, String title, String content) {
-        return new Review(idAuthor, title, content);
+    public static Review createReview(int idReview, String idAuthor, String title, String content) {
+        return new Review(idReview, idAuthor, title, content);
     }
 
     public String toString() {

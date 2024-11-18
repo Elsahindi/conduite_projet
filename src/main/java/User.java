@@ -44,7 +44,7 @@ abstract class User {
     //méthode qui permet à un utilisateur de poster un avis sur l'application
     public static Review sendReview(User Author, String title, String content) throws SQLException {
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
-                .prepareStatement("INSERT INTO review (idAuthor, title, content) VALUES (?,?,?)");
+                .prepareStatement("INSERT INTO review (idAuthor, title, content) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
 
         statement.setString(1,Author.getId());
         statement.setString(2,title );
@@ -52,18 +52,21 @@ abstract class User {
 
         statement.executeUpdate();
 
-        return Review.createReview(Author.getId(), title,content);
+        ResultSet generatedKeys = statement.getGeneratedKeys();
+        generatedKeys.next();
+        return Review.createReview(generatedKeys.getInt(1),Author.getId(), title,content);
     }
 
     //permet d'accéder à tous les reviews
     public static List<Review> getReviews() throws SQLException {
-        List<Review> reviews = new ArrayList<Review>();
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("SELECT * FROM review");
-
         ResultSet resultSet = statement.executeQuery();
+
+        List<Review> reviews = new ArrayList<>();
         while (resultSet.next()) {
-            reviews.add(new Review(resultSet.getString("idAuthor"),
+            reviews.add(new Review(resultSet.getInt("idReview"),
+                    resultSet.getString("idAuthor"),
                     resultSet.getString("title"),
                     resultSet.getString("content")));
 
