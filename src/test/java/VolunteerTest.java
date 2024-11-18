@@ -25,7 +25,7 @@ class VolunteerTest {
         statement.setString(3, volunteer.getId());
         statement.setString(4, "Demande pour volontaire");
         statement.setString(5, "WAITING");
-        statement.setString(6, client.getFacility());
+        statement.setString(6, String.valueOf(client.getFacility()));
         statement.execute();
     }
 
@@ -63,7 +63,7 @@ class VolunteerTest {
     @Test
     void getUser() {
         try {
-            Volunteer fetchedVolunteer = volunteer.getUser("volunteerId");
+            Volunteer fetchedVolunteer = Volunteer.getUser("volunteerId");
             assertNotNull(fetchedVolunteer);
             assertEquals("volunteerId", fetchedVolunteer.getId());
             assertEquals("volunteerPswd", fetchedVolunteer.getPswd());
@@ -93,5 +93,26 @@ class VolunteerTest {
         } catch (SQLException e) {
             fail("SQLException was thrown: " + e.getMessage());
         }
+    }
+
+    @Test
+    void chooseRequest() throws SQLException {
+        System.setIn(new java.io.ByteArrayInputStream( "y\n".getBytes()));
+        volunteer.chooseRequest();
+
+        List<Request> requests = volunteer.getRequests();
+        assertNotNull(requests);
+        assertFalse(requests.isEmpty());
+        Request request = requests.get(0);
+        assertEquals(volunteer.getId(), request.getIdDestination());
+//        assertEquals(Status.ACCEPTED, request.getStatus());
+
+        System.setIn(new java.io.ByteArrayInputStream("n\n".getBytes()));
+        volunteer.chooseRequest();
+        requests = volunteer.getRequests();
+        assertNotNull(requests);
+        assertFalse(requests.isEmpty());
+        request = requests.get(0);
+//        assertEquals(Status.VALIDATED, request.getStatus());
     }
 }

@@ -111,7 +111,7 @@ public class Validator extends User{
             requests.add(new Request(resultSet.getInt("idRequest"),
                     resultSet.getString("idSender"),
                     resultSet.getString("message"),
-                    resultSet.getString("disaproval"),
+                    resultSet.getString("validatorMessage"),
                     resultSet.getString("motif"),
                     Facilities.valueOf(resultSet.getString("facility").toUpperCase()),
                     Status.valueOf(resultSet.getString("status").toUpperCase()),
@@ -121,7 +121,8 @@ public class Validator extends User{
         return requests;
     }
 
-    public void validate() throws Exception {
+    public boolean validate() throws Exception {
+        boolean valid = false;
         List<Request> Requests = getRequests();
         if (!Requests.isEmpty()) {
             for (Request r : Requests) {
@@ -135,12 +136,13 @@ public class Validator extends User{
                 String response = scanner.nextLine();
                 if (response.equals("y")) {
                     r.setStatus(Status.VALIDATED);
+                    valid = true;
                 } else if (response.equals("n")) {
                     r.setStatus(Status.REJECTED);
-                    Scanner scannerDisaproval = new Scanner(System.in);
-                    System.out.println("Please explain the reason behind your disaproval : ");
-                    String disaproval = scannerDisaproval.nextLine();
-                    r.setDisaproval(disaproval);
+                    Scanner scannerValidatorMessage = new Scanner(System.in);
+                    System.out.println("Please explain the reason behind your validatorMessage : ");
+                    String validatorMessage = scannerValidatorMessage.nextLine();
+                    r.setValidatorMessage(validatorMessage);
                 } else {
                     throw new Exception("The response should be y or n");
                 }
@@ -149,6 +151,7 @@ public class Validator extends User{
         else{
             System.out.println("There is no Request to validate");
         }
+        return valid;
     }
 
 

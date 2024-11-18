@@ -42,28 +42,28 @@ abstract class User {
 
 
     //méthode qui permet à un utilisateur de poster un avis sur l'application
-    public static Review sendReview(User author, String title, String content) throws SQLException {
+    public static Review sendReview(User Author, String title, String content) throws SQLException {
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
-                .prepareStatement("INSERT INTO review (author, title, content) VALUES (?,?,?)");
+                .prepareStatement("INSERT INTO review (idAuthor, title, content) VALUES (?,?,?)");
 
-        statement.setString(1,author.getId());
+        statement.setString(1,Author.getId());
         statement.setString(2,title );
         statement.setString(3,content);
 
         statement.executeUpdate();
 
-        return Review.createReview(author.getId(), title,content);
+        return Review.createReview(Author.getId(), title,content);
     }
 
     //permet d'accéder à tous les reviews
-    public List<Review> getReviews() throws SQLException {
+    public static List<Review> getReviews() throws SQLException {
         List<Review> reviews = new ArrayList<Review>();
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("SELECT * FROM review");
 
         ResultSet resultSet = statement.executeQuery();
         while (resultSet.next()) {
-            reviews.add(new Review(resultSet.getString("author"),
+            reviews.add(new Review(resultSet.getString("idAuthor"),
                     resultSet.getString("title"),
                     resultSet.getString("content")));
 
@@ -80,8 +80,8 @@ abstract class User {
         while (iterator.hasNext()) {
             Review review = iterator.next();
 
-            // If the author of the review is not the current user, remove it from the list
-            if (!review.getIdAuthor().equals(getId())) {
+            // If the idAuthor of the review is not the current user, remove it from the list
+            if (!review.getidAuthor().equals(getId())) {
                 iterator.remove();
             }
         }

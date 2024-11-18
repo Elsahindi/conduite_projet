@@ -12,7 +12,7 @@ public class Client extends User{
         this.facility = facility ;
     }
 
-    public String getFacility() { return facility.name(); }
+    public Facilities getFacility() { return facility; }
 
     public static Client createClient(String id, String pswd, Facilities facility) throws SQLException {
 
@@ -123,7 +123,7 @@ public class Client extends User{
         while (resultSet.next()) {
             requests.add(new Request(resultSet.getInt("idRequest"),resultSet.getString("idSender"),
                     resultSet.getString("message"),
-                    resultSet.getString("disaproval"),
+                    resultSet.getString("validatorMessage"),
                     resultSet.getString("motif"),
                     Facilities.valueOf(resultSet.getString("facility").toUpperCase()),
                     Status.valueOf(resultSet.getString("status").toUpperCase()),

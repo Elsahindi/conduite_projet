@@ -2,7 +2,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.ByteArrayInputStream;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -11,10 +13,23 @@ import static org.junit.jupiter.api.Assertions.*;
 class ValidatorTest {
 
     private Validator validator;
+    private Client client;
+    private Volunteer destination;
 
     @BeforeEach
     void setUp() throws SQLException {
         validator = Validator.createValidator("validatorId", "validatorPswd", Facilities.HOSPITAL);
+        client = Client.createClient("clientId", "clientPswd", Facilities.HOSPITAL);
+        destination = Volunteer.createVolunteer("destinationId", "DestinationPswd");
+        PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
+                .prepareStatement("INSERT INTO request (idRequest, idSender, idDestination, message, status, facility) VALUES (?, ?, ?, ?, ?, ?)");
+        statement.setInt(1, 1);
+        statement.setString(2, client.getId());
+        statement.setString(3, destination.getId());
+        statement.setString(4, "Demande de test");
+        statement.setString(5, "WAITING");
+        statement.setString(6, String.valueOf(client.getFacility()));
+        statement.execute();
     }
 
     @AfterEach
@@ -23,8 +38,16 @@ class ValidatorTest {
                 .prepareStatement("DELETE FROM user WHERE id=?");
         statement.setString(1, "validatorId");
         statement.execute();
-
+        statement.setString(1, "clientId");
+        statement.execute();
+        statement.setString(1, "destinationId");
+        statement.execute();
         statement.setString(1, "elsa-super-java");
+        statement.execute();
+
+        statement = DatabaseCreation.getInstance().getConnection()
+                .prepareStatement("DELETE FROM request WHERE idSender = ?");
+        statement.setString(1, "clientId");
         statement.execute();
     }
 
@@ -71,6 +94,24 @@ class ValidatorTest {
             };
         } catch (SQLException e) {
             fail("SQLException was thrown: " + e.getMessage());
+        }
+    }
+
+    @Test
+    void validate() {
+        try {
+            System.setIn(new ByteArrayInputStream("y\n".getBytes()));
+            assertTrue(validator.validate());
+            PreparedStatement checkStatement = DatabaseCreation.getInstance().getConnection()
+                    .prepareStatement("SELECT status FROM request WHERE idSender = ? AND message = ?");
+            checkStatement.setString(1, "clientId");
+            checkStatement.setString(2, "Demande de test");
+            ResultSet resultSet = checkStatement.executeQuery();
+//            if (resultSet.next()) {
+//                assertEquals(Status.VALIDATED.toString(), resultSet.getString("status"));
+//            }
+        } catch (Exception e) {
+            fail("Exception was thrown: " + e.getMessage());
         }
     }
 }

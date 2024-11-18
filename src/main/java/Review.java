@@ -1,17 +1,17 @@
 public class Review {
 
-    private String IdAuthor;
+    private String idAuthor;
     private String title;
     private String content;
 
-    public Review(String IdAuthor, String title, String content) {
-        this.IdAuthor = IdAuthor;
+    public Review(String idAuthor, String title, String content) {
+        this.idAuthor = idAuthor;
         this.title = title;
         this.content = content;
     }
 
-    public String getIdAuthor(){
-        return IdAuthor;
+    public String getidAuthor(){
+        return idAuthor;
     }
 
     public String getTitle() {
@@ -22,8 +22,8 @@ public class Review {
         return content;
     }
 
-    public void setAuthor(String IdAuthor) {
-        this.IdAuthor = IdAuthor;
+    public void setAuthor(String idAuthor) {
+        this.idAuthor = idAuthor;
     }
 
     public void setTitle(String title) {
@@ -34,11 +34,15 @@ public class Review {
         this.content = content;
     }
 
-    public static Review createReview(String IdAuthor, String title, String content) {
-        return new Review(IdAuthor, title, content);
+    public static Review createReview(String idAuthor, String title, String content) {
+        return new Review(idAuthor, title, content);
     }
 
     public String toString() {
-        return IdAuthor + "\t" + title + "\t" + content;
+        return idAuthor + "\t" + title + "\t" + content;
+    }
+
+    public String getIdAuthor() {
+        return idAuthor;
     }
 }

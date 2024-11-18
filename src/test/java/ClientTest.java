@@ -27,7 +27,7 @@ class ClientTest {
         statement.setString(3, destination.getId());
         statement.setString(4, "Demande de test");
         statement.setString(5, "WAITING");
-        statement.setString(6, clientRequest.getFacility());
+        statement.setString(6, String.valueOf(clientRequest.getFacility()));
         statement.execute();
     }
 

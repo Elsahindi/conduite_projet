@@ -4,7 +4,7 @@ public class Request {
     private String idSender;
     private String idDestination;
     private String message;
-    private String disaproval;
+    private String validatorMessage;
     private String motif;
     private Status status;
     private Facilities facility;
@@ -17,12 +17,12 @@ public class Request {
         this.facility = facility;
 
     }
-    public Request(int idRequest, String idSender, String message, String disaproval, String motif, Facilities facility, Status status, String idDestination) {
+    public Request(int idRequest, String idSender, String message, String validatorMessage, String motif, Facilities facility, Status status, String idDestination) {
 
         this.idRequest = idRequest;
         this.idSender = idSender;
         this.message = message;
-        this.disaproval = disaproval;
+        this.validatorMessage = validatorMessage;
         this.motif = motif;
         this.facility = facility;
         this.status = status;
@@ -42,7 +42,7 @@ public class Request {
         return message;
     }
 
-    public String getDisaproval() {return disaproval;}
+    public String getValidatorMessage() {return validatorMessage;}
 
     public String getMotif() {return motif;}
 
@@ -60,7 +60,7 @@ public class Request {
         this.message = message;
     }
 
-    public void setDisaproval(String disaproval) {this.disaproval = disaproval;}
+    public void setValidatorMessage(String validatorMessage) {this.validatorMessage = validatorMessage;}
 
     public void setMotif(String motif) {
         this.motif = motif;
