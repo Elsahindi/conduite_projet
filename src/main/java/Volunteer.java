@@ -81,7 +81,7 @@ public class Volunteer extends User{
     };
 
 
-    public List<Request> seeAllRequests() throws SQLException {
+    public static List<Request> seeAllRequests() throws SQLException {
 
         // Requête SQL pour récupérer les demandes dont le statut est "en attente"
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
@@ -143,8 +143,11 @@ public class Volunteer extends User{
                 if (response.equals("y")) {
                     request.setIdDestination(getId());
                     request.setStatus(Status.ACCEPTED);
+                    request.save();
                 } else if (response.equals("n")) {
                     request.setStatus(Status.VALIDATED);
+                    request.save();
+                    System.out.println("status is: " + request.getStatus());
                 } else {
                     System.out.println("The response should be y or n");
                 }

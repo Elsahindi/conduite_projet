@@ -1,3 +1,7 @@
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 public class Request {
 
     private Integer idRequest;
@@ -84,4 +88,25 @@ public class Request {
         return "numéro de la requete : " + getIdRequest() + "identifiant de l'envoyeur : " + getIdSender() + " A destination de : " + getIdDestination() + " Message : " + getMessage() + " Status : " + getStatus() + " Facility : " + getFacility();
     }
 
+    public void save(){
+        PreparedStatement statement = null;
+        try {
+            statement = DatabaseCreation.getInstance().getConnection()
+                    .prepareStatement("UPDATE request SET idSender = ?, message = ?, validatorMessage = ?, motif = ?, facility = ?, status = ?, idDestination = ? WHERE idRequest = ?");
+            statement.setString(1,idSender);
+            statement.setString(2,message);
+            statement.setString(3,validatorMessage);
+            statement.setString(4,motif);
+            statement.setString(5,facility.toString());
+            statement.setString(6,status.toString());
+            statement.setString(7,idDestination);
+            statement.setInt(8,idRequest);
+            
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
 }

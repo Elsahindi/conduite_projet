@@ -24,7 +24,7 @@ public class Client extends User{
         ResultSet resultSet = checkStatement.executeQuery();
 
         if (resultSet.next() && resultSet.getInt(1) > 0) {
-            throw new SQLException("User" + id + "already exists");
+            throw new SQLException("User " + id + " already exists");
 
         }
         // Si l'identifiant n'existe pas, on continue avec la création du client

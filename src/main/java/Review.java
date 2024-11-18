@@ -1,3 +1,6 @@
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
 public class Review {
 
     private int idReview;
@@ -51,4 +54,24 @@ public class Review {
     public String getIdAuthor() {
         return idAuthor;
     }
+
+    public void save(){
+        PreparedStatement statement = null;
+        try {
+            statement = DatabaseCreation.getInstance().getConnection()
+                    .prepareStatement("UPDATE review SET idAuthor = ?, title = ?, content WHERE idReview = ?");
+            statement.setString(1,idAuthor);
+            statement.setString(2,title);
+            statement.setString(3,content);
+            statement.setInt(4,idReview);
+
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
 }
+
+

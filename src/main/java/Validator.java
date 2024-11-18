@@ -136,13 +136,15 @@ public class Validator extends User{
                 String response = scanner.nextLine();
                 if (response.equals("y")) {
                     r.setStatus(Status.VALIDATED);
+                    r.save();
                     valid = true;
                 } else if (response.equals("n")) {
                     r.setStatus(Status.REJECTED);
                     Scanner scannerValidatorMessage = new Scanner(System.in);
-                    System.out.println("Please explain the reason behind your validatorMessage : ");
+                    System.out.println("Please explain the reason behind your disapproval : ");
                     String validatorMessage = scannerValidatorMessage.nextLine();
                     r.setValidatorMessage(validatorMessage);
+                    r.save();
                 } else {
                     throw new Exception("The response should be y or n");
                 }
