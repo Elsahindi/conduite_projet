@@ -10,14 +10,6 @@ class DatabaseCreationTest {
 
     private DatabaseCreation databaseCreation;
 
-//    // to test if the connection is closed after each test
-//    @AfterEach
-//    void tearDown() throws SQLException {
-//        if (databaseCreation != null && databaseCreation.getConnection() != null) {
-//            databaseCreation.getConnection().close();
-//        }
-//    }
-
     @Test
     void getConnection() throws SQLException {
         databaseCreation = DatabaseCreation.getInstance();

@@ -11,47 +11,37 @@ public class Volunteer extends User{
         super(id,pswd);
     }
 
+    // Method to create a new volunteer
     public static Volunteer createVolunteer(String id, String pswd) throws SQLException {
-
-        // Vérifier si l'identifiant existe déjà dans la base de données
-
+        // Check if the volunteer ID already exists in the database
         PreparedStatement checkStatement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("SELECT COUNT(*) FROM volunteer WHERE id = ?");
         checkStatement.setString(1, id);
         ResultSet resultSet = checkStatement.executeQuery();
-
         if (resultSet.next() && resultSet.getInt(1) > 0) {
             throw new SQLException("User" + id + "already exists");
-
         }
-        User.createUser(id,pswd);
 
+        // Create a new user and save the data
+        User.createUser(id,pswd);
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("INSERT INTO volunteer (id) VALUES (?)");
-
         statement.setString(1, id);
-
         statement.execute();
-
         return new Volunteer(id,pswd);
-
     }
 
+    // Method to retrieve a Volunteer user from the database by ID
     public static Volunteer getUser(String id) throws SQLException {
-
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             statement = DatabaseCreation.getInstance().getConnection()
                     .prepareStatement("SELECT * FROM user INNER JOIN volunteer ON user.id = volunteer.id WHERE user.id = ?");
-
             statement.setString(1, id);
             resultSet = statement.executeQuery();
-
             if (resultSet.next()) {
-
                 String pswd = resultSet.getString("pswd");
-
                 return new Volunteer(id,pswd);
             } else {
                 throw new SQLException("User not found");
@@ -66,8 +56,8 @@ public class Volunteer extends User{
         }
     }
 
+    // Method to attempt logging in a Volunteer by checking his ID and password
     public int login(String id, String pswd){
-
         int connected = 0;
         try {
             if (getUser(id).getId().equals(id) && getUser(id).getPswd().equals(pswd)){
@@ -80,19 +70,15 @@ public class Volunteer extends User{
         return connected;
     };
 
-
+    // Method to retrieve all validated requests
     public static List<Request> seeAllRequests() throws SQLException {
-
-        // Requête SQL pour récupérer les demandes dont le statut est "en attente"
+        // SQL query to retrieve all validated requests
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("SELECT * FROM request WHERE status = ?");
-
         statement.setString(1, Status.VALIDATED.name()); // Statut "validée" par le validator
-
-        // Exécution de la requête
         ResultSet resultSet = statement.executeQuery();
 
-        // Liste des requêtes à renvoyer
+        // List to store the requests
         List<Request> requests = new ArrayList<>();
         while (resultSet.next()) {
             requests.add(new Request(resultSet.getInt("idRequest"),
@@ -104,12 +90,11 @@ public class Volunteer extends User{
                     Status.valueOf(resultSet.getString("status").toUpperCase()),
                     resultSet.getString("idDestination")));
         }
-
         return requests;
-
     }
+
     @Override
-    // Récupère les requête dont l'iD destination est l'iD du volunteer
+    // Method to retrieve requests that are linked to the volunteer's id
     public List<Request> getRequests() throws SQLException {
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("SELECT * FROM request WHERE idDestination = ? AND NOT status = ?");
@@ -131,7 +116,7 @@ public class Volunteer extends User{
         return requests;
     }
 
-    //Permet au bénévole de choisir la requete qu'il souhaite accomplir
+    // Method to allow the volunteer to choose which request to handle
     public void chooseRequest(Scanner scanner){
         try {
             List<Request> liste = seeAllRequests();
@@ -154,9 +139,5 @@ public class Volunteer extends User{
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
-
 }
-
-

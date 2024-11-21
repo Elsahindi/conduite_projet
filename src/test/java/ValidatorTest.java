@@ -16,6 +16,7 @@ class ValidatorTest {
     private Client client;
     private Volunteer destination;
 
+    // Set up method to initialize test data before each test
     @BeforeEach
     void setUp() throws SQLException {
         validator = Validator.createValidator("validatorId", "validatorPswd", Facilities.HOSPITAL);
@@ -32,6 +33,7 @@ class ValidatorTest {
         statement.execute();
     }
 
+    // Tear down method to clean up after each test
     @AfterEach
     void tearDown() throws SQLException {
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()

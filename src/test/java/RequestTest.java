@@ -11,14 +11,15 @@ import static org.junit.jupiter.api.Assertions.*;
 class RequestTest {
 
     private Client clientRequest;
-    private Volunteer volunteerRequest;
 
+    // Set up method to initialize test data before each test
     @BeforeEach
     void setUp() throws SQLException {
         clientRequest = Client.createClient("clientRequestId", "clientRequestPswd", Facilities.HOSPITAL);
-        volunteerRequest = Volunteer.createVolunteer("volunteerRequestId", "volunteerRequestPswd");
+        Volunteer volunteerRequest = Volunteer.createVolunteer("volunteerRequestId", "volunteerRequestPswd");
     }
 
+    // Tear down method to clean up after each test
     @AfterEach
     void tearDown() throws SQLException {
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()

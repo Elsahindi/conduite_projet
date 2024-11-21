@@ -21,6 +21,7 @@ class VolunteerTest {
     private Validator validatorSchool;
     private Validator validatorHospital;
 
+    // Set up method to initialize test data before each test
     @BeforeEach
     void setUp() throws Exception {
         volunteer = Volunteer.createVolunteer("volunteerId", "volunteerPswd");
@@ -51,6 +52,7 @@ class VolunteerTest {
         validatorHospital.validate();
     }
 
+    // Tear down method to clean up after each test
     @AfterEach
     void tearDown() throws SQLException {
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()

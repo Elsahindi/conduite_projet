@@ -1,4 +1,3 @@
-import java.io.ObjectInputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,52 +18,42 @@ public class Validator extends User{
         return facility;
     }
 
+    // Method to create a new Validator user in the database
     public static Validator createValidator(String id, String pswd, Facilities facility) throws SQLException {
-
-        // Vérifier si l'identifiant existe déjà dans la base de données
-
+        // Check if the user ID already exists in the validator table
         PreparedStatement checkStatement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("SELECT COUNT(*) FROM validator WHERE id = ?");
         checkStatement.setString(1, id);
         ResultSet resultSet = checkStatement.executeQuery();
-
         if (resultSet.next() && resultSet.getInt(1) > 0) {
             throw new SQLException("User" + id + "already exists");
 
         }
 
+        // Create a new user and save the data
         User.createUser(id,pswd);
-
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                     .prepareStatement("INSERT INTO validator (id, facility) VALUES (?, ?)");
-
             statement.setString(1, id);
             statement.setString(2, facility.toString());
-
             statement.execute();
         statement.close();
-
         return new Validator(id,pswd,facility);
     }
 
+    // Method to retrieve a Validator user from the database by ID
     public static Validator getUser(String id) throws SQLException {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             statement = DatabaseCreation.getInstance().getConnection()
                     .prepareStatement("SELECT * FROM user INNER JOIN validator ON user.id = validator.id WHERE user.id = ?");
-
             statement.setString(1, id);
             resultSet = statement.executeQuery();
-
             if (resultSet.next()) {
-
                 String pswd = resultSet.getString("pswd");
-
                 String facilityStr = resultSet.getString("facility");
                 Facilities facility = Facilities.valueOf(facilityStr.toUpperCase());
-
-
                 return new Validator(id, pswd, facility);
             } else {
                 throw new SQLException("User not found");
@@ -79,13 +68,13 @@ public class Validator extends User{
         }
     }
 
+    // Method to attempt logging in a validator by checking his ID and password
     public int login(String id, String pswd) {
         int connected = 0;
         try {
             if (getUser(id).getId().equals(id) && getUser(id).getPswd().equals(pswd)) {
                 connected = 1;
             }
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -93,19 +82,17 @@ public class Validator extends User{
     };
 
     @Override
-    // Ici on souhaite récuperer les requêtes lié à la facility du validator
+    // Method to retrieve requests that are linked to the validator's facility
     public List<Request> getRequests() throws SQLException {
-        // Requête SQL pour récupérer les demandes dont le statut est "en attente"
+        // SQL query to get requests for the specific facility with a "waiting" status
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("SELECT * FROM request WHERE facility = ? AND status = ?");
 
         statement.setString(1,getFacility().toString()); // en fonction de la facility du validator
         statement.setString(2, (String.valueOf(Status.WAITING)));
-
-        // Exécution de la requête
         ResultSet resultSet = statement.executeQuery();
 
-        // Liste des requêtes à renvoyer
+        // List to store the requests
         List<Request> requests = new ArrayList<>();
         while (resultSet.next()) {
             requests.add(new Request(resultSet.getInt("idRequest"),
@@ -117,18 +104,19 @@ public class Validator extends User{
                     Status.valueOf(resultSet.getString("status").toUpperCase()),
                     resultSet.getString("idDestination")));
         }
-
         return requests;
     }
 
+    // Method for the validator to approve or reject requests
     public boolean validate() throws Exception {
         boolean valid = false;
         List<Request> Requests = getRequests();
         if (!Requests.isEmpty()) {
             for (Request r : Requests) {
                 if (r.getStatus() == Status.VALIDATED) {
+                    // Skip already validated requests
                     System.out.println("\nThe request : " + r.toString() + " has already been approved .");
-                    continue;  // Passer à la requête suivante, sans la valider à nouveau
+                    continue;
                 }
                 System.out.println("\n The request is : " + r.toString());
                 Scanner scanner = new Scanner(System.in);
@@ -155,11 +143,4 @@ public class Validator extends User{
         }
         return valid;
     }
-
-
 }
-
-
-
-
-

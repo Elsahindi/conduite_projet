@@ -1,7 +1,6 @@
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class Request {
 
@@ -36,59 +35,50 @@ public class Request {
     }
 
     public int getIdRequest() {return idRequest;}
+    public void setIdRequest(int idRequest) {this.idRequest = idRequest;}
 
     public String getIdSender() {return idSender;}
-
-    public String getIdDestination() {
-        return idDestination;
+    public void setIdSender(String idSender) {
+        this.idSender = idSender;
     }
 
     public String getMessage() {
         return message;
     }
-
-    public String getValidatorMessage() {return validatorMessage;}
-
-    public String getMotif() {return motif;}
-
-    public void setIdRequest(int idRequest) {this.idRequest = idRequest;}
-
-    public void setIdSender(String idSender) {
-        this.idSender = idSender;
-    }
-
-    public void setIdDestination(String idDestination) {
-        this.idDestination = idDestination;
-    }
-
     public void setMessage(String message) {
         this.message = message;
     }
 
+    public String getValidatorMessage() {return validatorMessage;}
     public void setValidatorMessage(String validatorMessage) {this.validatorMessage = validatorMessage;}
 
+    public String getMotif() {return motif;}
     public void setMotif(String motif) {
         this.motif = motif;
         this.setStatus(Status.WAITING);
     }
 
+    public Facilities getFacility() { return facility;}
+    public void setFacility(Facilities facility) { this.facility = facility; }
+
     public Status getStatus() {
         return status;
     }
-
     public void setStatus(Status status) {this.status = status;}
 
-    public void setFacility(Facilities facility) { this.facility = facility; }
+    public String getIdDestination() {
+        return idDestination;
+    }
+    public void setIdDestination(String idDestination) {
+        this.idDestination = idDestination;
+    }
 
-    public Facilities getFacility() { return facility;}
-
+    // Static method to create a new Request instance
     public static Request createRequest(int idRequest, String idSender, String message, Facilities facility) {
         return new Request(idRequest, idSender, message, facility);
     }
-    public String toString() {
-        return "numéro de la requete : " + getIdRequest() + "identifiant de l'envoyeur : " + getIdSender() + " A destination de : " + getIdDestination() + " Message : " + getMessage() + " Status : " + getStatus() + " Facility : " + getFacility();
-    }
 
+    // Method to save or update the request in the database
     public void save() {
         try {
             boolean exists;
@@ -131,4 +121,7 @@ public class Request {
         }
     }
 
+    public String toString() {
+        return "numéro de la requete : " + getIdRequest() + "identifiant de l'envoyeur : " + getIdSender() + " A destination de : " + getIdDestination() + " Message : " + getMessage() + " Status : " + getStatus() + " Facility : " + getFacility();
+    }
 }

@@ -1,4 +1,3 @@
-import javax.xml.crypto.Data;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,31 +24,28 @@ abstract class User {
         return pswd;
     }
 
+    // Method to create a new user in the database
     public static void createUser(String id, String pswd) throws SQLException {
-
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("INSERT INTO user (id, pswd) VALUES (?,?)");
-
         statement.setString(1, id);
         statement.setString(2, pswd);
-
         statement.execute();
     }
 
+    // Abstract method for user login
     public abstract int login(String id, String pswd);
 
+    // Abstract method to get the list of requests associated with the user
     public abstract List<Request> getRequests() throws SQLException;
 
-
-    //méthode qui permet à un utilisateur de poster un avis sur l'application
+    // Method for a user to send a review
     public static Review sendReview(User Author, String title, String content) throws SQLException {
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("INSERT INTO review (idAuthor, title, content) VALUES (?,?,?)", Statement.RETURN_GENERATED_KEYS);
-
         statement.setString(1,Author.getId());
         statement.setString(2,title );
         statement.setString(3,content);
-
         statement.executeUpdate();
 
         ResultSet generatedKeys = statement.getGeneratedKeys();
@@ -57,7 +53,7 @@ abstract class User {
         return Review.createReview(generatedKeys.getInt(1),Author.getId(), title,content);
     }
 
-    //permet d'accéder à tous les reviews
+    // Method to get all reviews from the database
     public static List<Review> getReviews() throws SQLException {
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("SELECT * FROM review");
@@ -69,25 +65,21 @@ abstract class User {
                     resultSet.getString("idAuthor"),
                     resultSet.getString("title"),
                     resultSet.getString("content")));
-
         }
         return reviews;
     }
 
-    //permet au user d'accéder uniquement à ses propres reviews
+    // Method for a user to get only their own reviews (filtered by user ID)
     public List<Review> getMyReviews() throws SQLException {
-        List<Review> reviews = getReviews();  // Retrieve all reviews
-
+        List<Review> reviews = getReviews();
         // Use an iterator to safely remove elements while iterating
         Iterator<Review> iterator = reviews.iterator();
         while (iterator.hasNext()) {
             Review review = iterator.next();
-
-            // If the idAuthor of the review is not the current user, remove it from the list
             if (!review.getidAuthor().equals(getId())) {
                 iterator.remove();
             }
         }
-        return reviews;  // Return the filtered list
+        return reviews;
     }
 }

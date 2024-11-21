@@ -17,45 +17,39 @@ public class Review {
     }
 
     public int getIdReview() { return idReview; }
-
     public void setIdReview(int idReview) { this.idReview = idReview; }
 
     public String getidAuthor(){
         return idAuthor;
     }
+    public void setAuthor(String idAuthor) {
+        this.idAuthor = idAuthor;
+    }
 
     public String getTitle() {
         return title;
+    }
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getContent() {
         return content;
     }
-
-    public void setAuthor(String idAuthor) {
-        this.idAuthor = idAuthor;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public void setContent(String content) {
         this.content = content;
     }
 
+    // Static method to create a Review object
     public static Review createReview(int idReview, String idAuthor, String title, String content) {
         return new Review(idReview, idAuthor, title, content);
-    }
-
-    public String toString() {
-        return idAuthor + "\t" + title + "\t" + content;
     }
 
     public String getIdAuthor() {
         return idAuthor;
     }
 
+    // Method to save or update the Review in the database
     public void save(){
         try {
             boolean exists;
@@ -86,6 +80,8 @@ public class Review {
             throw new RuntimeException(e);
         }
     }
+
+    public String toString() {
+        return idAuthor + "\t" + title + "\t" + content;
+    }
 }
-
-
