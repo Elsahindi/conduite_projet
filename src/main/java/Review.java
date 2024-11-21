@@ -1,4 +1,5 @@
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Review {
@@ -56,21 +57,34 @@ public class Review {
     }
 
     public void save(){
-        PreparedStatement statement = null;
         try {
-            statement = DatabaseCreation.getInstance().getConnection()
-                    .prepareStatement("UPDATE review SET idAuthor = ?, title = ?, content WHERE idReview = ?");
-            statement.setString(1,idAuthor);
-            statement.setString(2,title);
-            statement.setString(3,content);
-            statement.setInt(4,idReview);
-
-            statement.executeUpdate();
+            boolean exists;
+            try (PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
+                    .prepareStatement("SELECT 1 FROM review WHERE idReview = ?")) {
+                statement.setInt(1, idReview);
+                ResultSet resultSet = statement.executeQuery();
+                exists = resultSet.next();
+            }
+            if (exists) {
+                try (PreparedStatement updateStatement = DatabaseCreation.getInstance().getConnection()
+                            .prepareStatement("UPDATE review SET idAuthor = ?, title = ?, content WHERE idReview = ?")){
+                    updateStatement.setString(1,idAuthor);
+                    updateStatement.setString(2,title);
+                    updateStatement.setString(3,content);
+                    updateStatement.setInt(4,idReview);
+                    updateStatement.executeUpdate();}
+            } else {
+                try (PreparedStatement updateStatement = DatabaseCreation.getInstance().getConnection()
+                        .prepareStatement("INSERT INTO review (idReview, idAuthor, title, content)  VALUES (?, ?, ?, ?)")){
+                    updateStatement.setString(1,idAuthor);
+                    updateStatement.setString(2,title);
+                    updateStatement.setString(3,content);
+                    updateStatement.setInt(4,idReview);
+                    updateStatement.executeUpdate();}
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 }
 

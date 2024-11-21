@@ -98,7 +98,7 @@ class ClientTest {
             statement.setString(2, message);
 
             ResultSet resultSet = statement.executeQuery();
-            assertTrue(resultSet.next(), "La requête n'a pas été enregistrée dans la base de données.");
+            assertTrue(resultSet.next());
             assertEquals("clientId", resultSet.getString("idSender"));
             assertEquals(message, resultSet.getString("message"));
             assertEquals(facility.name(), resultSet.getString("facility"));

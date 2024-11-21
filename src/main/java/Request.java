@@ -1,4 +1,5 @@
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -88,25 +89,46 @@ public class Request {
         return "numéro de la requete : " + getIdRequest() + "identifiant de l'envoyeur : " + getIdSender() + " A destination de : " + getIdDestination() + " Message : " + getMessage() + " Status : " + getStatus() + " Facility : " + getFacility();
     }
 
-    public void save(){
-        PreparedStatement statement = null;
+    public void save() {
         try {
-            statement = DatabaseCreation.getInstance().getConnection()
-                    .prepareStatement("UPDATE request SET idSender = ?, message = ?, validatorMessage = ?, motif = ?, facility = ?, status = ?, idDestination = ? WHERE idRequest = ?");
-            statement.setString(1,idSender);
-            statement.setString(2,message);
-            statement.setString(3,validatorMessage);
-            statement.setString(4,motif);
-            statement.setString(5,facility.toString());
-            statement.setString(6,status.toString());
-            statement.setString(7,idDestination);
-            statement.setInt(8,idRequest);
-            
-            statement.executeUpdate();
+            boolean exists;
+            try (PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
+                    .prepareStatement("SELECT 1 FROM request WHERE idRequest = ?")) {
+                statement.setInt(1, idRequest);
+                ResultSet resultSet = statement.executeQuery();
+                exists = resultSet.next();
+            }
+            if (exists) {
+                try (PreparedStatement updateStatement = DatabaseCreation.getInstance().getConnection()
+                                .prepareStatement("UPDATE request SET idSender = ?, message = ?, validatorMessage = ?, motif = ?, facility = ?, status = ?, idDestination = ? WHERE idRequest = ?")) {
+                    updateStatement.setString(1, idSender);
+                    updateStatement.setString(2, message);
+                    updateStatement.setString(3, validatorMessage);
+                    updateStatement.setString(4, motif);
+                    updateStatement.setString(5, facility.toString());
+                    updateStatement.setString(6, status.toString());
+                    updateStatement.setString(7, idDestination);
+                    updateStatement.setInt(8, idRequest);
+                    updateStatement.executeUpdate();
+                }
+            } else {
+                try (PreparedStatement insertStatement = DatabaseCreation.getInstance().getConnection()
+                        .prepareStatement("INSERT INTO request (idRequest, idSender, message, validatorMessage, motif, facility, status, idDestination) " +
+                                "VALUES (?, ?, ?, ?, ?, ?, ?, ?)")) {
+                    insertStatement.setInt(1, idRequest);
+                    insertStatement.setString(2, idSender);
+                    insertStatement.setString(3, message);
+                    insertStatement.setString(4, validatorMessage);
+                    insertStatement.setString(5, motif);
+                    insertStatement.setString(6, facility.toString());
+                    insertStatement.setString(7, status.toString());
+                    insertStatement.setString(8, idDestination);
+                    insertStatement.executeUpdate();
+                }
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
-
     }
+
 }

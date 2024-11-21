@@ -2,6 +2,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Scanner;
 
 
 public class Main {
@@ -22,7 +23,8 @@ public class Main {
 
             System.out.println(request.getStatus());
             newValidator.validate();
-            newVolunteer.chooseRequest();
+            Scanner scanner = new Scanner(System.in);
+            newVolunteer.chooseRequest(scanner);
 
             //System.out.println("validator getrequest: " + newValidator.getRequests());
             //System.out.println("client getrequest" + newClient.getRequests());

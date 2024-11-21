@@ -107,9 +107,9 @@ class ValidatorTest {
             checkStatement.setString(1, "clientId");
             checkStatement.setString(2, "Demande de test");
             ResultSet resultSet = checkStatement.executeQuery();
-//            if (resultSet.next()) {
-//               assertEquals(Status.VALIDATED.toString(), resultSet.getString("status"));
-//            }
+            if (resultSet.next()) {
+               assertEquals(Status.VALIDATED.toString(), resultSet.getString("status"));
+            }
         } catch (Exception e) {
             fail("Exception was thrown: " + e.getMessage());
         }

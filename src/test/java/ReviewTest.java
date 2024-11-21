@@ -17,4 +17,8 @@ class ReviewTest {
         assertEquals(title, review.getTitle());
         assertEquals(content, review.getContent());
     }
+
+    @Test
+    void save() {
+    }
 }

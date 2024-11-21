@@ -132,12 +132,11 @@ public class Volunteer extends User{
     }
 
     //Permet au bénévole de choisir la requete qu'il souhaite accomplir
-    public void chooseRequest(){
+    public void chooseRequest(Scanner scanner){
         try {
             List<Request> liste = seeAllRequests();
             for (Request request : liste) {
                 System.out.println("\n The request is : " + request.toString());
-                Scanner scanner = new Scanner(System.in);
                 System.out.println("\n Do you volunteer to handle this task? y/n");
                 String response = scanner.nextLine();
                 if (response.equals("y")) {
