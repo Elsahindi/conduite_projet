@@ -1,6 +1,11 @@
+package usersTest;
+
+import database.DatabaseCreation;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import review.Review;
+import users.*;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,17 +30,17 @@ class UserTest {
                 .prepareStatement("INSERT INTO review (idReview, idAuthor, title, content) VALUES (?, ?, ?, ?)");
         statement.setInt(1,1);
         statement.setString(2,validator.getId());
-        statement.setString(3,"Validator Review");
+        statement.setString(3,"users.Validator review.Review");
         statement.setString(4,"This is the first review");
         statement.execute();
         statement.setInt(1,2);
         statement.setString(2, volunteer.getId());
-        statement.setString(3,"Volunteer Review");
+        statement.setString(3,"users.Volunteer review.Review");
         statement.setString(4,"This is the second review");
         statement.execute();
         statement.setInt(1,3);
         statement.setString(2, volunteer.getId());
-        statement.setString(3,"Volunteer Review bis");
+        statement.setString(3,"users.Volunteer review.Review bis");
         statement.setString(4,"This is the third review");
         statement.execute();
     }
@@ -55,17 +60,17 @@ class UserTest {
 
     @Test
     void sendReview() throws SQLException {
-        Review review = User.sendReview(client, "Client Review", "This is the first review");
+        Review review = User.sendReview(client, "users.Client review.Review", "This is the first review");
         assertNotNull(review);
         assertEquals("clientId", review.getIdAuthor());
-        assertEquals("Client Review", review.getTitle());
+        assertEquals("users.Client review.Review", review.getTitle());
         assertEquals("This is the first review", review.getContent());
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("SELECT * FROM review WHERE idAuthor = ?");
         statement.setString(1, "clientId");
         ResultSet resultSet = statement.executeQuery();
         assertTrue(resultSet.next());
-        assertEquals("Client Review", resultSet.getString("title"));
+        assertEquals("users.Client review.Review", resultSet.getString("title"));
         assertEquals("This is the first review", resultSet.getString("content"));
     }
 

@@ -1,3 +1,5 @@
+package database;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -15,7 +17,7 @@ public class DatabaseCreation {
         return connection;
     }
 
-    // Singleton to get a single instance of DatabaseCreation
+    // Singleton to get a single instance of database.DatabaseCreation
     public static DatabaseCreation getInstance(){
         if (instance == null) {
             instance = new DatabaseCreation();

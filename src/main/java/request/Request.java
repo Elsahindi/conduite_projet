@@ -1,3 +1,8 @@
+package request;
+
+import database.DatabaseCreation;
+import users.Facilities;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -73,7 +78,7 @@ public class Request {
         this.idDestination = idDestination;
     }
 
-    // Static method to create a new Request instance
+    // Static method to create a new request.Request instance
     public static Request createRequest(int idRequest, String idSender, String message, Facilities facility) {
         return new Request(idRequest, idSender, message, facility);
     }
@@ -122,6 +127,6 @@ public class Request {
     }
 
     public String toString() {
-        return "numéro de la requete : " + getIdRequest() + "identifiant de l'envoyeur : " + getIdSender() + " A destination de : " + getIdDestination() + " Message : " + getMessage() + " Status : " + getStatus() + " Facility : " + getFacility();
+        return "numéro de la requete : " + getIdRequest() + "identifiant de l'envoyeur : " + getIdSender() + " A destination de : " + getIdDestination() + " Message : " + getMessage() + " request.Status : " + getStatus() + " Facility : " + getFacility();
     }
 }

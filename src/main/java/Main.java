@@ -1,7 +1,10 @@
-import java.sql.Connection;
-import java.sql.DriverManager;
+import request.Request;
+import users.Client;
+import users.Facilities;
+import users.Validator;
+import users.Volunteer;
+
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Scanner;
 
 
@@ -12,13 +15,13 @@ public class Main {
             Client newClient = Client.getUser("testchoose1");
             Volunteer newVolunteer = Volunteer.getUser("anyaa");
             Validator newValidator = Validator.getUser("buddie");
-            System.out.println("Client created : " + newClient.getId() + "Facility" + newClient.getFacility());
-            System.out.println("Volunteer created : " + newVolunteer.getId());
-            System.out.println("Validator created: " + newValidator.getId() + ", Facility: " + newValidator.facility);
+            System.out.println("users.Client created : " + newClient.getId() + "Facility" + newClient.getFacility());
+            System.out.println("users.Volunteer created : " + newVolunteer.getId());
+            System.out.println("users.Validator created: " + newValidator.getId() + ", Facility: " + newValidator.facility);
 
-            Request request = Client.sendRequest("testchoose1","coucou ca vaaa",Facilities.HOSPITAL);
+            Request request = Client.sendRequest("testchoose1","coucou ca vaaa", Facilities.HOSPITAL);
             //System.out.println(request.getStatus());
-            //request.setStatus(Status.VALIDATED);
+            //request.setStatus(request.Status.VALIDATED);
 
 
             System.out.println(request.getStatus());
@@ -32,8 +35,8 @@ public class Main {
             System.out.println("volunteer getrequest" + newVolunteer.getRequests());
 
             // Retrieve the validator from the database by id
-            //Validator fetchedValidator = newValidator.getUser("test_user2");
-            //System.out.println("Fetched Validator: " + fetchedValidator.getId() + ", Facility: " + fetchedValidator.facility);
+            //users.Validator fetchedValidator = newValidator.getUser("test_user2");
+            //System.out.println("Fetched users.Validator: " + fetchedValidator.getId() + ", Facility: " + fetchedValidator.facility);
 
 
         } catch (SQLException e) {

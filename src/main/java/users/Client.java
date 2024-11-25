@@ -1,8 +1,14 @@
+package users;
+
+import database.DatabaseCreation;
+import request.Request;
+import request.Status;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Client extends User{
+public class Client extends User {
 
     public Facilities facility;
 
@@ -21,7 +27,7 @@ public class Client extends User{
         checkStatement.setString(1, id);
         ResultSet resultSet = checkStatement.executeQuery();
         if (resultSet.next() && resultSet.getInt(1) > 0) {
-            throw new SQLException("User " + id + " already exists");
+            throw new SQLException("users.User " + id + " already exists");
         }
 
         // If the client ID does not exist, proceed to create the client
@@ -49,7 +55,7 @@ public class Client extends User{
                 Facilities facility = Facilities.valueOf(facilityStr.toUpperCase());
                 return new Client(id,pswd,facility);
             } else {
-                throw new SQLException("User not found");
+                throw new SQLException("users.User not found");
             }
         } finally {
             if (resultSet != null) {

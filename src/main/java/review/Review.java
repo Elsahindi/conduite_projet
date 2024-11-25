@@ -1,3 +1,7 @@
+package review;
+
+import database.DatabaseCreation;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -40,7 +44,7 @@ public class Review {
         this.content = content;
     }
 
-    // Static method to create a Review object
+    // Static method to create a review.Review object
     public static Review createReview(int idReview, String idAuthor, String title, String content) {
         return new Review(idReview, idAuthor, title, content);
     }
@@ -49,7 +53,7 @@ public class Review {
         return idAuthor;
     }
 
-    // Method to save or update the Review in the database
+    // Method to save or update the review.Review in the database
     public void save(){
         try {
             boolean exists;

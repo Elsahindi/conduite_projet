@@ -1,4 +1,6 @@
-import org.junit.jupiter.api.AfterEach;
+package databaseTest;
+
+import database.DatabaseCreation;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
@@ -23,6 +25,6 @@ class DatabaseCreationTest {
     void getInstance() {
         DatabaseCreation instance1 = DatabaseCreation.getInstance();
         DatabaseCreation instance2 = DatabaseCreation.getInstance();
-        assertSame(instance1, instance2, "It should be only one DatabaseCreation");
+        assertSame(instance1, instance2, "It should be only one database.DatabaseCreation");
     }
 }

@@ -1,3 +1,9 @@
+package users;
+
+import database.DatabaseCreation;
+import request.Request;
+import review.Review;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -6,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-abstract class User {
+public abstract class User {
 
     private String id;
     private String pswd;

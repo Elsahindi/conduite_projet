@@ -1,3 +1,5 @@
+package users;
+
 // Enum different types of facilities for CLIENTS
 public enum Facilities {
 

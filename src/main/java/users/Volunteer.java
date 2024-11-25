@@ -1,3 +1,9 @@
+package users;
+
+import database.DatabaseCreation;
+import request.Request;
+import request.Status;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -5,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Volunteer extends User{
+public class Volunteer extends User {
 
     public Volunteer(String id, String pswd) {
         super(id,pswd);
@@ -19,7 +25,7 @@ public class Volunteer extends User{
         checkStatement.setString(1, id);
         ResultSet resultSet = checkStatement.executeQuery();
         if (resultSet.next() && resultSet.getInt(1) > 0) {
-            throw new SQLException("User" + id + "already exists");
+            throw new SQLException("users.User" + id + "already exists");
         }
 
         // Create a new user and save the data
@@ -31,7 +37,7 @@ public class Volunteer extends User{
         return new Volunteer(id,pswd);
     }
 
-    // Method to retrieve a Volunteer user from the database by ID
+    // Method to retrieve a users.Volunteer user from the database by ID
     public static Volunteer getUser(String id) throws SQLException {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -44,7 +50,7 @@ public class Volunteer extends User{
                 String pswd = resultSet.getString("pswd");
                 return new Volunteer(id,pswd);
             } else {
-                throw new SQLException("User not found");
+                throw new SQLException("users.User not found");
             }
         } finally {
             if (resultSet != null) {
@@ -56,7 +62,7 @@ public class Volunteer extends User{
         }
     }
 
-    // Method to attempt logging in a Volunteer by checking his ID and password
+    // Method to attempt logging in a users.Volunteer by checking his ID and password
     public int login(String id, String pswd){
         int connected = 0;
         try {

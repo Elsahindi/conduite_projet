@@ -28,7 +28,7 @@ replay_pid*
 
 # Default ignored files
 /shelf/
-# Editor-based HTTP Client requests
+# Editor-based HTTP users.Client requests
 /httpRequests/
 # Datasource local storage ignored files
 /dataSources/

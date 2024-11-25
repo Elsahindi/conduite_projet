@@ -1,3 +1,9 @@
+package users;
+
+import database.DatabaseCreation;
+import request.Request;
+import request.Status;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -5,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-public class Validator extends User{
+public class Validator extends User {
 
     public Facilities facility;
 
@@ -18,7 +24,7 @@ public class Validator extends User{
         return facility;
     }
 
-    // Method to create a new Validator user in the database
+    // Method to create a new users.Validator user in the database
     public static Validator createValidator(String id, String pswd, Facilities facility) throws SQLException {
         // Check if the user ID already exists in the validator table
         PreparedStatement checkStatement = DatabaseCreation.getInstance().getConnection()
@@ -26,7 +32,7 @@ public class Validator extends User{
         checkStatement.setString(1, id);
         ResultSet resultSet = checkStatement.executeQuery();
         if (resultSet.next() && resultSet.getInt(1) > 0) {
-            throw new SQLException("User" + id + "already exists");
+            throw new SQLException("users.User" + id + "already exists");
 
         }
 
@@ -41,7 +47,7 @@ public class Validator extends User{
         return new Validator(id,pswd,facility);
     }
 
-    // Method to retrieve a Validator user from the database by ID
+    // Method to retrieve a users.Validator user from the database by ID
     public static Validator getUser(String id) throws SQLException {
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -56,7 +62,7 @@ public class Validator extends User{
                 Facilities facility = Facilities.valueOf(facilityStr.toUpperCase());
                 return new Validator(id, pswd, facility);
             } else {
-                throw new SQLException("User not found");
+                throw new SQLException("users.User not found");
             }
         } finally {
             if (resultSet != null) {
@@ -139,7 +145,7 @@ public class Validator extends User{
             }
         }
         else{
-            System.out.println("There is no Request to validate");
+            System.out.println("There is no request.Request to validate");
         }
         return valid;
     }
