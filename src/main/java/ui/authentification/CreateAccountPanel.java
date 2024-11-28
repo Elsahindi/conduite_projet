@@ -5,6 +5,7 @@ import ui.WindowManager;
 import users.*;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,8 +34,11 @@ public class CreateAccountPanel extends JPanel {
 
     public CreateAccountPanel() {
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        setPreferredSize(new Dimension(400,300));
-        setBorder(BorderFactory.createTitledBorder("Create your account"));
+
+        // Set preferred and maximum size of the panel
+        setSize(new Dimension(400, 300));
+        setMaximumSize(new Dimension(400, 300));
+        setBorder(new EmptyBorder(10, 10, 10, 10)); // Add padding around the panel
 
         // Username Field
         JLabel usernameLabel = new JLabel("Username:");
@@ -48,6 +52,7 @@ public class CreateAccountPanel extends JPanel {
         JLabel passwordLabel = new JLabel("Password:");
         passwordField = new JPasswordField();
         passwordField.setSize(200, 25);
+        passwordField.setMaximumSize(new Dimension(300, 25));
         add(passwordLabel);
         add(passwordField);
 
@@ -73,6 +78,7 @@ public class CreateAccountPanel extends JPanel {
 
         // Label for facility selection
         facilityLabel = new JLabel("Please select the facility you are in:");
+        facilityLabel.setBorder(new EmptyBorder(20, 0, 20, 30));
         additionalPanel.add(facilityLabel);
 
         // Radio Buttons for Institution Selection
@@ -111,12 +117,22 @@ public class CreateAccountPanel extends JPanel {
         validatorButton.addActionListener(roleListener);
         volunteerButton.addActionListener(roleListener);
 
+        // Popup for error
+        JLabel popup = new JLabel();
+        this.add(popup);
+        popup.setVisible(false);
+
         // Add action listener to the OK button
         registerButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Facilities facility = null;
                 User user = null;
+
+                if ((usernameField.getText()).isEmpty() || (String.valueOf(passwordField.getPassword()).isEmpty())){
+                    popup.setText("Please enter a valid username");
+                    popup.setVisible(true);
+                }
                 try {
                         if (hospitalButton.isSelected()) {
                             facility = Facilities.HOSPITAL;
@@ -139,7 +155,8 @@ public class CreateAccountPanel extends JPanel {
                 }
 
                 }catch (SQLException ex) {
-                    throw new RuntimeException(ex);
+                    popup.setText(ex.getMessage());
+                    popup.setVisible(true);
                 }
 
                 WindowManager.getInstance().setCurrentFrame(new HomeFrame(user));

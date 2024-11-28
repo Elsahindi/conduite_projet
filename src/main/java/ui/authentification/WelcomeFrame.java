@@ -16,7 +16,7 @@ public class WelcomeFrame extends JFrame {
     public WelcomeFrame() {
         super("Welcome to the request service.");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(400, 300);
+        this.setSize(400, 400);
 
         panel1 = new JPanel();
         panel1.setLayout(new BorderLayout());
@@ -74,7 +74,7 @@ public class WelcomeFrame extends JFrame {
         // Create a custom JDialog
         JDialog createAccountDialog = new JDialog(this, "Create Account", true);
         createAccountDialog.setContentPane(createAccountPanel); // Set the content to the CreateAccountPanel
-        createAccountDialog.setSize(400, 270); // Set the size of the dialog
+        createAccountDialog.setSize(400, 400); // Set the size of the dialog
         createAccountDialog.setLocationRelativeTo(this); // Center it relative to the main frame
 
         // Make the dialog visible
@@ -84,15 +84,15 @@ public class WelcomeFrame extends JFrame {
 
 
     private void showRegisterPanel() {
+
         // Create the Register Panel
-        RegisterPanel registerPanel = new RegisterPanel();
+        LoginPanel registerPanel = new LoginPanel();
 
         // Create a custom JDialog for Register
         JDialog registerDialog = new JDialog(this, "Register", true);
-        registerDialog.setContentPane(registerPanel); // Set the content to the RegisterPanel
-        registerDialog.setSize(400, 270); // Set the size of the dialog
-        registerDialog.setLocationRelativeTo(this); // Center it relative to the main frame
-
+        registerDialog.setContentPane(registerPanel);
+        registerDialog.setSize(400, 400);
+        registerDialog.setLocationRelativeTo(this);
         // Make the dialog visible
         registerDialog.setVisible(true);
     }
