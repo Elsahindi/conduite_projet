@@ -29,9 +29,9 @@ Ensure the following tools are installed before proceeding:
    ```
 
 ## Usage
-To start the application, run the main class using Maven:
+To start the application with the GUI, run the main class using Maven:
 ```bash
-mvn exec:java -Dexec.mainClass="Main"
+mvn exec:java
 ```
 
 ## Tests

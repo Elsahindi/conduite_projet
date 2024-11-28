@@ -23,8 +23,8 @@ jobs:
     - name: Compile with Maven
       run: mvn --batch-mode compile
 
-    - name: Test with Maven
+    - name: Tests with Maven
       run: mvn --batch-mode test
 
-    - name: Build with Maven
+    - name: Package the application
       run: mvn -B package --file pom.xml
