@@ -5,5 +5,6 @@ public enum Facilities {
 
     HOSPITAL(),
     RETIREMENT(),
-    SCHOOL()
+    SCHOOL(),
+    HIHI()
 }

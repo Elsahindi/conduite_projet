@@ -149,4 +149,16 @@ public class Validator extends User {
         }
         return valid;
     }
+
+    public void accepter(Request request){
+        request.setStatus(Status.VALIDATED);
+        request.save();
+
+    }
+
+    public void refuser(Request request, String motif){
+        request.setStatus(Status.REJECTED);
+        request.setMotif(motif);
+        request.save();
+    }
 }

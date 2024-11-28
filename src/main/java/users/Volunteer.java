@@ -146,4 +146,10 @@ public class Volunteer extends User {
             throw new RuntimeException(e);
         }
     }
+
+    public void acceptRequest(Request request){
+        request.setIdDestination(getId());
+        request.setStatus(Status.ACCEPTED);
+        request.save();
+    }
 }
