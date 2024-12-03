@@ -62,19 +62,6 @@ public class Volunteer extends User {
         }
     }
 
-    // Method to attempt logging in a users.Volunteer by checking his ID and password
-    public int login(String id, String pswd){
-        int connected = 0;
-        try {
-            if (getUser(id).getId().equals(id) && getUser(id).getPswd().equals(pswd)){
-                connected = 1;
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return connected;
-    };
 
     // Method to retrieve all validated requests
     public static List<Request> seeAllRequests() throws SQLException {

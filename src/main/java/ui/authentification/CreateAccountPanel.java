@@ -158,7 +158,7 @@ public class CreateAccountPanel extends JPanel {
                     popup.setText(ex.getMessage());
                     popup.setVisible(true);
                 }
-
+                System.out.println(user);
                 WindowManager.getInstance().setCurrentFrame(new HomeFrame(user));
 
             }

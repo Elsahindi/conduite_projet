@@ -89,12 +89,6 @@ class ValidatorTest {
     }
 
     @Test
-    void login() {
-        assertDoesNotThrow(() -> validator.login("validatorId", "validatorPswd"));
-        assertThrows(RuntimeException.class, () -> validator.login("wrongId", "wrongPswd"));
-    }
-
-    @Test
     void getRequests() {
         try {
             List<Request> requests = validator.getRequests();

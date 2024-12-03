@@ -58,6 +58,20 @@ class UserTest {
         statement.execute();
     }
 
+    void login() {
+        assertDoesNotThrow(() -> client.login("clientId", "clientPswd"));
+        assertThrows(RuntimeException.class, () -> client.login("wrongId", "wrongPswd"));
+
+
+        assertDoesNotThrow(() -> validator.login("validatorId", "validatorPswd"));
+        assertThrows(RuntimeException.class, () -> validator.login("wrongId", "wrongPswd"));
+
+
+        assertDoesNotThrow(() -> volunteer.login("volunteerId", "volunteerPswd"));
+        assertThrows(RuntimeException.class, () -> volunteer.login("wrongId", "wrongPswd"));
+
+    }
+
     @Test
     void sendReview() throws SQLException {
         Review review = User.sendReview(client, "users.Client review.Review", "This is the first review");

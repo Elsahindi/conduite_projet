@@ -39,9 +39,6 @@ public abstract class User {
         statement.execute();
     }
 
-    // Abstract method for user login
-    public abstract int login(String id, String pswd);
-
     // Abstract method to get the list of requests associated with the user
     public abstract List<Request> getRequests() throws SQLException;
 
@@ -88,4 +85,41 @@ public abstract class User {
         }
         return reviews;
     }
+
+    public static User getUser(String id) throws SQLException {
+        User user = null;
+        try{
+            user = Validator.getUser(id);
+        } catch (Exception e) {
+            try{
+                user = Volunteer.getUser(id);
+            }catch (Exception e1){
+                try{
+                    user = Client.getUser(id);
+                } catch (Exception e2){
+                    throw new RuntimeException("User not found for the given credentials.");
+                }
+            }
+        }
+        return user;
+    }
+
+    public static int login(String id, String pswd){
+        int connected = 0;
+        User user = null;
+        try {
+            user = getUser(id);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        if (user.getId().equals(id) && user.getPswd().equals(pswd)) {
+            connected = 1;
+        }
+        return connected;
+    }
+
+
 }
+
+
+//get user() voir screen romain, elle est obligatoirement statique (remplacer login par getuser).

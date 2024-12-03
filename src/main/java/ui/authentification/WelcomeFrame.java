@@ -40,7 +40,7 @@ public class WelcomeFrame extends JFrame {
         buttonPanel.add(createAnAccountButton);
 
         // Register Button
-        registerButton = new JButton("Register");
+        registerButton = new JButton("Login");
         registerButton.setPreferredSize(new Dimension(150, 40));
         buttonPanel.add(registerButton);
 
@@ -56,12 +56,7 @@ public class WelcomeFrame extends JFrame {
         });
 
         // Action for "Register" Button
-        registerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                showRegisterPanel();
-            }
-        });
+        registerButton.addActionListener(e -> showRegisterPanel());
 
         this.add(panel1);
         this.setVisible(true);
@@ -89,9 +84,9 @@ public class WelcomeFrame extends JFrame {
         LoginPanel registerPanel = new LoginPanel();
 
         // Create a custom JDialog for Register
-        JDialog registerDialog = new JDialog(this, "Register", true);
+        JDialog registerDialog = new JDialog(this, "Login", true);
         registerDialog.setContentPane(registerPanel);
-        registerDialog.setSize(400, 400);
+        registerDialog.setSize(400, 200);
         registerDialog.setLocationRelativeTo(this);
         // Make the dialog visible
         registerDialog.setVisible(true);

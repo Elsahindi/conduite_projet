@@ -60,7 +60,6 @@ public class Request {
     public String getMotif() {return motif;}
     public void setMotif(String motif) {
         this.motif = motif;
-        this.setStatus(Status.WAITING);
     }
 
     public Facilities getFacility() { return facility;}

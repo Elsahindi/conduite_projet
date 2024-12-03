@@ -127,12 +127,6 @@ class VolunteerTest {
     }
 
     @Test
-    void login() {
-        assertDoesNotThrow(() -> volunteer.login("volunteerId", "volunteerPswd"));
-        assertThrows(RuntimeException.class, () -> volunteer.login("wrongId", "wrongPswd"));
-    }
-
-    @Test
     void getRequests() {
         try {
             List<Request> requests = volunteer.getRequests();

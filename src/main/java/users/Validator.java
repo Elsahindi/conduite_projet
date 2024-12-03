@@ -74,19 +74,6 @@ public class Validator extends User {
         }
     }
 
-    // Method to attempt logging in a validator by checking his ID and password
-    public int login(String id, String pswd) {
-        int connected = 0;
-        try {
-            if (getUser(id).getId().equals(id) && getUser(id).getPswd().equals(pswd)) {
-                connected = 1;
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return connected;
-    };
-
     @Override
     // Method to retrieve requests that are linked to the validator's facility
     public List<Request> getRequests() throws SQLException {
@@ -161,4 +148,6 @@ public class Validator extends User {
         request.setMotif(motif);
         request.save();
     }
+
+
 }
