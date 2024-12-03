@@ -1,13 +1,13 @@
 # Application of Mutual Assistance
 
 ## Description
-This **Maven** project implements a *chat system* designed to serve as the foundation for a **Vulnerable Person Help application**. The goal is to connect individuals in need of assistance with volunteers willing to help, facilitated by a validation system.  
+This **Maven** project implements an *Application of Mutual Assistance* designed to serve as the foundation for a **Vulnerable Person Help application**. The goal is to connect individuals in need of assistance with volunteers willing to help, facilitated by a validation system did by a validator.  
 **Key features include**:
-- Users can register as individuals in need, volunteers, or validators.
+- Users can register as individuals in need (*Client*), volunteers (*Volunteer*), or validators (*Validator*).
 - Needs can be entered by individuals, and volunteers can respond to these requests or propose spontaneous help.
 - Validators oversee and approve missions, providing reasons for rejected validations.
 - Missions progress through statuses: *WAITING*, *VALIDATED*, *ACCEPTED*, *REJECTED*, or *DONE*.
-- Feedback can be left by users after a mission.
+- Feedback can be left by any of the three users involve in the request after a mission.
 
 ## Prerequisites
 Ensure the following tools are installed before proceeding:
@@ -29,9 +29,9 @@ Ensure the following tools are installed before proceeding:
    ```
 
 ## Usage
-To start the application, run the main class using Maven:
+To start the application with the GUI, run the main class using Maven:
 ```bash
-mvn exec:java -Dexec.mainClass="Main"
+mvn exec:java
 ```
 
 ## Tests
