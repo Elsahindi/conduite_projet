@@ -16,6 +16,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UserTest {
 
+    private static final String CLIENT_ID = "clientId";
+    private static final String VALIDATOR_ID = "validatorId";
+    private static final String VOLUNTEER_ID = "volunteerId";
+
     private Client client;
     private Validator validator;
     private Volunteer volunteer;
@@ -23,23 +27,23 @@ class UserTest {
     // Set up method to initialize test data before each test
     @BeforeEach
     void setUp() throws SQLException {
-        client = Client.createClient("clientId", "clientPswd", Facilities.HOSPITAL);
-        validator = Validator.createValidator("validatorId", "validatorPswd", Facilities.HOSPITAL);
-        volunteer = Volunteer.createVolunteer("volunteerId", "volunteerPswd");
+        client = Client.createClient(CLIENT_ID, "clientPswd", Facilities.HOSPITAL);
+        validator = Validator.createValidator(VALIDATOR_ID, "validatorPswd", Facilities.HOSPITAL);
+        volunteer = Volunteer.createVolunteer(VOLUNTEER_ID, "volunteerPswd");
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("INSERT INTO review (idReview, idAuthor, title, content) VALUES (?, ?, ?, ?)");
         statement.setInt(1,1);
-        statement.setString(2,validator.getId());
+        statement.setString(2,VALIDATOR_ID);
         statement.setString(3,"users.Validator review.Review");
         statement.setString(4,"This is the first review");
         statement.execute();
         statement.setInt(1,2);
-        statement.setString(2, volunteer.getId());
+        statement.setString(2, VOLUNTEER_ID);
         statement.setString(3,"users.Volunteer review.Review");
         statement.setString(4,"This is the second review");
         statement.execute();
         statement.setInt(1,3);
-        statement.setString(2, volunteer.getId());
+        statement.setString(2, VOLUNTEER_ID);
         statement.setString(3,"users.Volunteer review.Review bis");
         statement.setString(4,"This is the third review");
         statement.execute();
@@ -50,41 +54,39 @@ class UserTest {
     void tearDown() throws SQLException {
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("DELETE FROM user WHERE id=?");
-        statement.setString(1, "clientId");
+        statement.setString(1, CLIENT_ID);
         statement.execute();
-        statement.setString(1, "validatorId");
+        statement.setString(1, VALIDATOR_ID);
         statement.execute();
-        statement.setString(1, "volunteerId");
+        statement.setString(1, VOLUNTEER_ID);
         statement.execute();
     }
 
+    @Test
     void login() {
-        assertDoesNotThrow(() -> client.login("clientId", "clientPswd"));
-        assertThrows(RuntimeException.class, () -> client.login("wrongId", "wrongPswd"));
+        assertDoesNotThrow(() -> User.login(CLIENT_ID, "clientPswd"));
+        assertThrows(RuntimeException.class, () -> User.login("wrongId", "wrongPswd"));
 
+        assertDoesNotThrow(() -> User.login(VALIDATOR_ID, "validatorPswd"));
+        assertThrows(RuntimeException.class, () -> User.login("wrongId", "wrongPswd"));
 
-        assertDoesNotThrow(() -> validator.login("validatorId", "validatorPswd"));
-        assertThrows(RuntimeException.class, () -> validator.login("wrongId", "wrongPswd"));
-
-
-        assertDoesNotThrow(() -> volunteer.login("volunteerId", "volunteerPswd"));
-        assertThrows(RuntimeException.class, () -> volunteer.login("wrongId", "wrongPswd"));
-
+        assertDoesNotThrow(() -> User.login(VOLUNTEER_ID, "volunteerPswd"));
+        assertThrows(RuntimeException.class, () -> User.login("wrongId", "wrongPswd"));
     }
 
     @Test
     void sendReview() throws SQLException {
-        Review review = User.sendReview(client, "users.Client review.Review", "This is the first review");
+        Review review = User.sendReview(client, "Client review", "This is the first review");
         assertNotNull(review);
-        assertEquals("clientId", review.getIdAuthor());
-        assertEquals("users.Client review.Review", review.getTitle());
+        assertEquals(CLIENT_ID, review.getIdAuthor());
+        assertEquals("Client review", review.getTitle());
         assertEquals("This is the first review", review.getContent());
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("SELECT * FROM review WHERE idAuthor = ?");
         statement.setString(1, "clientId");
         ResultSet resultSet = statement.executeQuery();
         assertTrue(resultSet.next());
-        assertEquals("users.Client review.Review", resultSet.getString("title"));
+        assertEquals("Client review", resultSet.getString("title"));
         assertEquals("This is the first review", resultSet.getString("content"));
     }
 
@@ -100,10 +102,10 @@ class UserTest {
         List<Review> ValidatorReviews = validator.getMyReviews();
         assertNotNull(ValidatorReviews);
         assertEquals(1, ValidatorReviews.size());
-        assertEquals("validatorId", ValidatorReviews.get(0).getIdAuthor());
+        assertEquals(VALIDATOR_ID, ValidatorReviews.get(0).getIdAuthor());
         List<Review> VolunteerReviews = volunteer.getMyReviews();
         assertNotNull(VolunteerReviews);
         assertEquals(2, VolunteerReviews.size());
-        assertEquals("volunteerId", VolunteerReviews.get(0).getIdAuthor());
+        assertEquals(VOLUNTEER_ID, VolunteerReviews.get(0).getIdAuthor());
     }
 }

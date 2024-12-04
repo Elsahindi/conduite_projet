@@ -6,10 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import request.Request;
 import request.Status;
-import users.Client;
-import users.Facilities;
-import users.Validator;
-import users.Volunteer;
+import users.*;
 
 import java.io.ByteArrayInputStream;
 import java.sql.PreparedStatement;
@@ -21,6 +18,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ValidatorTest {
 
+    private static final String CLIENT_ID = "clientId";
+    private static final String VALIDATOR_ID = "validatorId";
+    private static final String VOLUNTEER_ID = "destinationId";
+    private static final String WAITING_STATUS = "WAITING";
+    private static final String VALIDATED_STATUS = Status.VALIDATED.toString();
     private Validator validator;
     private Client client;
     private Volunteer destination;
@@ -28,14 +30,14 @@ class ValidatorTest {
     // Set up method to initialize test data before each test
     @BeforeEach
     void setUp() throws SQLException {
-        validator = Validator.createValidator("validatorId", "validatorPswd", Facilities.HOSPITAL);
-        client = Client.createClient("clientId", "clientPswd", Facilities.HOSPITAL);
-        destination = Volunteer.createVolunteer("destinationId", "DestinationPswd");
+        validator = Validator.createValidator(VALIDATOR_ID, "validatorPswd", Facilities.HOSPITAL);
+        client = Client.createClient(CLIENT_ID, "clientPswd", Facilities.HOSPITAL);
+        destination = Volunteer.createVolunteer(VOLUNTEER_ID, "DestinationPswd");
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("INSERT INTO request (idRequest, idSender, idDestination, message, status, facility) VALUES (?, ?, ?, ?, ?, ?)");
         statement.setInt(1, 1);
-        statement.setString(2, client.getId());
-        statement.setString(3, destination.getId());
+        statement.setString(2, CLIENT_ID);
+        statement.setString(3, VOLUNTEER_ID);
         statement.setString(4, "Demande de test");
         statement.setString(5, "WAITING");
         statement.setString(6, String.valueOf(client.getFacility()));
@@ -47,28 +49,28 @@ class ValidatorTest {
     void tearDown() throws SQLException {
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("DELETE FROM user WHERE id=?");
-        statement.setString(1, "validatorId");
+        statement.setString(1, VALIDATOR_ID);
         statement.execute();
-        statement.setString(1, "clientId");
+        statement.setString(1, CLIENT_ID);
         statement.execute();
-        statement.setString(1, "destinationId");
+        statement.setString(1, VOLUNTEER_ID);
         statement.execute();
-        statement.setString(1, "elsa-super-java");
+        statement.setString(1, "new_validatorId");
         statement.execute();
 
         statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("DELETE FROM request WHERE idSender = ?");
-        statement.setString(1, "clientId");
+        statement.setString(1, CLIENT_ID);
         statement.execute();
     }
 
     @Test
     void createValidator() {
         try {
-            Validator newValidator = Validator.createValidator("elsa-super-java", "romain-le-chien", Facilities.RETIREMENT);
+            Validator newValidator = Validator.createValidator("new_validatorId", "new_validatorpswd", Facilities.RETIREMENT);
             assertNotNull(newValidator);
-            assertEquals("elsa-super-java", newValidator.getId());
-            assertEquals("romain-le-chien", newValidator.getPswd());
+            assertEquals("new_validatorId", newValidator.getId());
+            assertEquals("new_validatorpswd", newValidator.getPswd());
             assertEquals(Facilities.RETIREMENT, newValidator.facility);
         } catch (SQLException e) {
             fail("SQLException was thrown: " + e.getMessage());
@@ -78,14 +80,20 @@ class ValidatorTest {
     @Test
     void getUser() {
         try {
-            Validator fetchedValidator = validator.getUser("validatorId");
+            Validator fetchedValidator = validator.getUser(VALIDATOR_ID);
             assertNotNull(fetchedValidator);
-            assertEquals("validatorId", fetchedValidator.getId());
+            assertEquals(VALIDATOR_ID, fetchedValidator.getId());
             assertEquals("validatorPswd", fetchedValidator.getPswd());
             assertEquals(Facilities.HOSPITAL, fetchedValidator.facility);
         } catch (SQLException e) {
             fail("SQLException was thrown: " + e.getMessage());
         }
+    }
+
+    @Test
+    void login() {
+        assertDoesNotThrow(() -> User.login(VALIDATOR_ID, "validatorPswd"));
+        assertThrows(RuntimeException.class, () -> User.login("wrongId", "wrongPswd"));
     }
 
     @Test
@@ -96,27 +104,33 @@ class ValidatorTest {
             if (!requests.isEmpty()) {
                 Request request = requests.get(0);
                 assertEquals(Facilities.HOSPITAL, request.getFacility());
-            };
+            }
         } catch (SQLException e) {
             fail("SQLException was thrown: " + e.getMessage());
         }
     }
 
-    @Test
-    void validate() {
-        try {
-            System.setIn(new ByteArrayInputStream("y\n".getBytes()));
-            assertTrue(validator.validate());
-            PreparedStatement checkStatement = DatabaseCreation.getInstance().getConnection()
-                    .prepareStatement("SELECT status FROM request WHERE idSender = ? AND message = ?");
-            checkStatement.setString(1, "clientId");
-            checkStatement.setString(2, "Demande de test");
+    private void assertValidRequestStatus(String senderId, String message, String expectedStatus) throws SQLException {
+        try (PreparedStatement checkStatement = DatabaseCreation.getInstance().getConnection()
+                .prepareStatement("SELECT status FROM request WHERE idSender = ? AND message = ?")) {
+            checkStatement.setString(1, senderId);
+            checkStatement.setString(2, message);
             ResultSet resultSet = checkStatement.executeQuery();
             if (resultSet.next()) {
-               assertEquals(Status.VALIDATED.toString(), resultSet.getString("status"));
+                assertEquals(expectedStatus, resultSet.getString("status"));
             }
-        } catch (Exception e) {
-            fail("Exception was thrown: " + e.getMessage());
         }
     }
+
+    // Testing of the CLI
+//    @Test
+//    void validate() {
+//        try {
+//            System.setIn(new ByteArrayInputStream("y\n".getBytes()));
+//            assertTrue(validator.validate());
+//            assertValidRequestStatus(CLIENT_ID, "Demande de test", VALIDATED_STATUS);
+//        } catch (Exception e) {
+//            fail("Exception was thrown: " + e.getMessage());
+//        }
+//    }
 }

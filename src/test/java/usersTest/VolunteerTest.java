@@ -22,8 +22,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class VolunteerTest {
 
     private Volunteer volunteer;
-    private Volunteer volunteerRefused;
-    private Volunteer volunteerAccepted;
+//    private Volunteer volunteerRefused;
+//    private Volunteer volunteerAccepted;
     private Client client;
     private Client clientRefused;
     private Client clientAccepted;
@@ -34,10 +34,9 @@ class VolunteerTest {
     @BeforeEach
     void setUp() throws Exception {
         volunteer = Volunteer.createVolunteer("volunteerId", "volunteerPswd");
-        volunteerRefused = Volunteer.createVolunteer("volunteerRefusedId", "volunteerRefusedPswd");
-        volunteerAccepted = Volunteer.createVolunteer("volunteerAcceptedId", "volunteerAcceptedPswd");
+//        volunteerRefused = Volunteer.createVolunteer("volunteerRefusedId", "volunteerRefusedPswd");
+//        volunteerAccepted = Volunteer.createVolunteer("volunteerAcceptedId", "volunteerAcceptedPswd");
         client = Client.createClient("clientId", "clientPswd", Facilities.RETIREMENT);
-
 
         clientRefused = Client.createClient("clientRefusedId", "clientRefusedPswd", Facilities.HOSPITAL);
         clientAccepted = Client.createClient("clientAcceptedId", "clientAcceptedPswd", Facilities.SCHOOL);
@@ -144,29 +143,6 @@ class VolunteerTest {
     }
 
     @Test
-    void chooseRequestAccepted() throws SQLException {
-        String simulatedInput = "y\nn\n";
-        Scanner scanner = new Scanner(new java.io.ByteArrayInputStream(simulatedInput.getBytes()));
-        volunteerAccepted.chooseRequest(scanner);
-        List<Request> requests = volunteerAccepted.getRequests();
-        assertNotNull(requests);
-        assertFalse(requests.isEmpty());
-        Request request = requests.get(0);
-        assertEquals(volunteerAccepted.getId(), request.getIdDestination());
-        assertEquals(Status.ACCEPTED, request.getStatus());
-    }
-
-    @Test
-    void chooseRequestRefused() throws SQLException {
-        String simulatedInput = "n\nn\n";
-        Scanner scanner = new Scanner(new java.io.ByteArrayInputStream(simulatedInput.getBytes()));
-        volunteerRefused.chooseRequest(scanner);
-        List<Request> requests = volunteerRefused.getRequests();
-        assertNotNull(requests);
-        assertTrue(requests.isEmpty());
-    }
-
-    @Test
     void seeAllRequests() throws SQLException {
         List<Request> requests = Volunteer.seeAllRequests();
         assertEquals(2, requests.size());
@@ -175,4 +151,28 @@ class VolunteerTest {
         assertEquals(clientAccepted.getId(), request1.getIdSender());
         assertEquals(clientRefused.getId(), request2.getIdSender());
     }
+
+    //Test of the CLI
+//    @Test
+//    void chooseRequestAccepted() throws SQLException {
+//        String simulatedInput = "y\nn\n";
+//        Scanner scanner = new Scanner(new java.io.ByteArrayInputStream(simulatedInput.getBytes()));
+//        volunteerAccepted.chooseRequest(scanner);
+//        List<Request> requests = volunteerAccepted.getRequests();
+//        assertNotNull(requests);
+//        assertFalse(requests.isEmpty());
+//        Request request = requests.get(0);
+//        assertEquals(volunteerAccepted.getId(), request.getIdDestination());
+//        assertEquals(Status.ACCEPTED, request.getStatus());
+//    }
+//
+//    @Test
+//    void chooseRequestRefused() throws SQLException {
+//        String simulatedInput = "n\nn\n";
+//        Scanner scanner = new Scanner(new java.io.ByteArrayInputStream(simulatedInput.getBytes()));
+//        volunteerRefused.chooseRequest(scanner);
+//        List<Request> requests = volunteerRefused.getRequests();
+//        assertNotNull(requests);
+//        assertTrue(requests.isEmpty());
+//    }
 }

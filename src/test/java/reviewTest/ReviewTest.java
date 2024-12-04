@@ -13,8 +13,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class ReviewTest {
 
     public String idAuthor = "author";
-    public String title = "Test review.Review";
-    public String content = "This is a test of the reviewm creation method.";
+    public String title = "Test review";
+    public String content = "This is a test of the review creation method.";
 
     // Tear down method to clean up after each test
     @AfterEach
@@ -29,7 +29,7 @@ class ReviewTest {
     public void createReview() {
         Review review = Review.createReview(1, idAuthor, title, content);
         assertNotNull(review);
-        assertEquals(idAuthor, review.getidAuthor());
+        assertEquals(idAuthor, review.getIdAuthor());
         assertEquals(title, review.getTitle());
         assertEquals(content, review.getContent());
     }

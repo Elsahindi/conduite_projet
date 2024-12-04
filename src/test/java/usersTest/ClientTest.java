@@ -8,6 +8,7 @@ import request.Request;
 import request.Status;
 import users.Client;
 import users.Facilities;
+import users.User;
 import users.Volunteer;
 
 import java.sql.PreparedStatement;
@@ -18,6 +19,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ClientTest {
+    private static final String CLIENT_ID = "clientId";
+    private static final String CLIENT_REQUEST_ID = "clientRequestId";
+    private static final String DESTINATION_ID = "destinationId";
+    private static final String REQUEST_MESSAGE = "Demande de test";
 
     private Client client;
     private Client clientRequest;
@@ -26,15 +31,15 @@ class ClientTest {
     // Set up method to initialize test data before each test
     @BeforeEach
     void setUp() throws SQLException {
-        client = Client.createClient("clientId", "clientPswd", Facilities.HOSPITAL);
-        clientRequest = Client.createClient("clientRequestId", "clientRequestPswd", Facilities.HOSPITAL);
-        destination = Volunteer.createVolunteer("destinationId", "DestinationPswd");
+        client = Client.createClient(CLIENT_ID, "clientPswd", Facilities.HOSPITAL);
+        clientRequest = Client.createClient(CLIENT_REQUEST_ID, "clientRequestPswd", Facilities.HOSPITAL);
+        destination = Volunteer.createVolunteer(DESTINATION_ID, "DestinationPswd");
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("INSERT INTO request (idRequest, idSender, idDestination, message, status, facility) VALUES (?, ?, ?, ?, ?, ?)");
         statement.setInt(1, 1);
         statement.setString(2, clientRequest.getId());
         statement.setString(3, destination.getId());
-        statement.setString(4, "Demande de test");
+        statement.setString(4, REQUEST_MESSAGE);
         statement.setString(5, "WAITING");
         statement.setString(6, String.valueOf(clientRequest.getFacility()));
         statement.execute();
@@ -45,21 +50,21 @@ class ClientTest {
     void tearDown() throws SQLException {
         PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("DELETE FROM user WHERE id=?");
-        statement.setString(1, "clientId");
+        statement.setString(1, CLIENT_ID);
         statement.execute();
 
         statement.setString(1, "newClientId");
         statement.execute();
 
-        statement.setString(1, "clientRequestId");
+        statement.setString(1, CLIENT_REQUEST_ID);
         statement.execute();
 
-        statement.setString(1, "destinationId");
+        statement.setString(1, DESTINATION_ID);
         statement.execute();
 
         statement = DatabaseCreation.getInstance().getConnection()
                 .prepareStatement("DELETE FROM request WHERE idSender=?");
-        statement.setString(1, "clientRequestId");
+        statement.setString(1, CLIENT_REQUEST_ID);
         statement.execute();
     }
 
@@ -79,9 +84,9 @@ class ClientTest {
     @Test
     void getUser() {
         try {
-            Client fetchedClient = client.getUser("clientId");
+            Client fetchedClient = Client.getUser(CLIENT_ID);
             assertNotNull(fetchedClient);
-            assertEquals("clientId", fetchedClient.getId());
+            assertEquals(CLIENT_ID, fetchedClient.getId());
             assertEquals("clientPswd", fetchedClient.getPswd());
             assertEquals(Facilities.HOSPITAL, fetchedClient.facility);
         } catch (SQLException e) {
@@ -91,31 +96,29 @@ class ClientTest {
 
     @Test
     void login() {
-        assertDoesNotThrow(() -> client.login("clientId", "clientPswd"));
-        assertThrows(RuntimeException.class, () -> client.login("wrongId", "wrongPswd"));
+        assertDoesNotThrow(() -> User.login(CLIENT_ID, "clientPswd"));
+        assertThrows(RuntimeException.class, () -> User.login("wrongId", "wrongPswd"));
     }
 
     @Test
     void sendRequest() throws SQLException {
-        try{
-            String message = "Nouvelle demande pour validation";
-            Facilities facility = Facilities.HOSPITAL;
-            Client.sendRequest("clientId", message, facility);
+        String message = "Nouvelle demande pour validation";
+        Facilities facility = Facilities.HOSPITAL;
 
-            PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
-                    .prepareStatement("SELECT * FROM request WHERE idSender = ? AND message = ?");
-            statement.setString(1, "clientId");
+        Client.sendRequest(CLIENT_ID, message, facility);
+
+        try (PreparedStatement statement = DatabaseCreation.getInstance().getConnection()
+                .prepareStatement("SELECT * FROM request WHERE idSender = ? AND message = ?")) {
+            statement.setString(1, CLIENT_ID);
             statement.setString(2, message);
 
             ResultSet resultSet = statement.executeQuery();
             assertTrue(resultSet.next());
-            assertEquals("clientId", resultSet.getString("idSender"));
+            assertEquals(CLIENT_ID, resultSet.getString("idSender"));
             assertEquals(message, resultSet.getString("message"));
             assertEquals(facility.name(), resultSet.getString("facility"));
             assertEquals("WAITING", resultSet.getString("status"));
-
-    } catch (SQLException e) {
-        fail("SQLException was thrown: " + e.getMessage());}
+        }
     }
 
     @Test
@@ -125,8 +128,8 @@ class ClientTest {
             assertNotNull(requests);
             assertFalse(requests.isEmpty());
             Request request = requests.get(0);
-            assertEquals("clientRequestId", request.getIdSender());
-            assertEquals("Demande de test", request.getMessage());
+            assertEquals(CLIENT_REQUEST_ID, request.getIdSender());
+            assertEquals(REQUEST_MESSAGE, request.getMessage());
             assertEquals(Facilities.HOSPITAL, request.getFacility());
             assertEquals(Status.WAITING, request.getStatus());
         } catch (SQLException e) {
