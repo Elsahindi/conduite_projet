@@ -29,6 +29,10 @@ Ensure the following tools are installed before proceeding:
    ```
 
 ## Usage
+To accedd to the database, run this:
+```bash
+mysql -h srv-bdens.insa-toulouse.fr --port=3306 -u projet_gei_028  -p projet_gei_028
+```
 To start the application with the GUI, run the main class using Maven:
 ```bash
 mvn exec:java
