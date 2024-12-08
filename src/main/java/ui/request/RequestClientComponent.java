@@ -3,29 +3,30 @@ package ui.request;
 import request.Request;
 import request.Status;
 import users.Client;
-import users.Volunteer;
 
 import javax.swing.*;
-import java.awt.*;
 
 public class RequestClientComponent extends JPanel {
 
-    private JLabel status;
-
-    private JLabel message;
-
     public RequestClientComponent(Request request, Client client) {
 
-        message = new JLabel(request.getMessage());
+        setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        status = new JLabel(request.getStatus().toString());
+
+        JLabel message = new JLabel(request.getMessage());
+        JLabel status = new JLabel(request.getStatus().toString());
+
 
         this.add(status);
         this.add(message);
 
-        if (request.getStatus().equals(Status.REJECTED)){
-            JLabel motif = new JLabel(request.getMotif());
+
+        if (request.getStatus().equals(Status.REJECTED)) {
+            JLabel motif = new JLabel("Reason : " + request.getMotif());
             this.add(motif);
         }
+
+
+        this.add(Box.createVerticalStrut(10));
     }
 }

@@ -8,42 +8,57 @@ import users.Volunteer;
 import javax.swing.*;
 import java.awt.*;
 
-import static javax.swing.BoxLayout.Y_AXIS;
-
 public class HomeFrame extends JFrame {
 
     private JLabel labelwelcome;
 
-
     public HomeFrame(User user) {
-
         super("Home");
-        this.setSize(500, 500);
+
+        // Set up window properties
+        this.setSize(600, 500);  // Slightly larger size
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setLocationRelativeTo(null); // Center the window
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel,Y_AXIS));
+        // Create a main panel with vertical BoxLayout
+        JPanel mainPanel = new JPanel();
+        mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
+        mainPanel.setBackground(Color.WHITE); // Set a clean white background
 
+        // Create and style welcome label
         labelwelcome = new JLabel("Welcome " + user.getId());
-        panel.add(labelwelcome);
+        labelwelcome.setFont(new Font("Arial", Font.BOLD, 24)); // Larger, bold font
+        labelwelcome.setAlignmentX(Component.CENTER_ALIGNMENT); // Center align
+        labelwelcome.setForeground(new Color(51, 51, 51)); // Dark gray color
+        mainPanel.add(labelwelcome);
+        mainPanel.add(Box.createVerticalStrut(20));  // Add vertical space after the welcome label
 
-        if (user instanceof Validator){
+        // Conditionally add the appropriate panel based on the user type
+        if (user instanceof Validator) {
             ValidatorPanel validatorPanel = new ValidatorPanel((Validator) user);
-            panel.add(validatorPanel);
-        }
-
-        if (user instanceof Volunteer){
+            stylePanel(validatorPanel);
+            mainPanel.add(validatorPanel);
+        } else if (user instanceof Volunteer) {
             VolunteerPanel volunteerPanel = new VolunteerPanel((Volunteer) user);
-            panel.add(volunteerPanel);
-        }
-
-        if (user instanceof Client){
+            stylePanel(volunteerPanel);
+            mainPanel.add(volunteerPanel);
+        } else if (user instanceof Client) {
             ClientPanel clientPanel = new ClientPanel((Client) user);
-            panel.add(clientPanel);
+            stylePanel(clientPanel);
+            mainPanel.add(clientPanel);
         }
 
-        this.add(panel, BorderLayout.CENTER);
+        // Add the main panel to the frame
+        this.add(mainPanel, BorderLayout.CENTER);
+    }
 
-
+    // Helper function to style each user panel
+    private void stylePanel(JPanel panel) {
+        panel.setBackground(new Color(240, 240, 240)); // Light gray background for the panel
+        panel.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 220))); // Light border for separation
+        panel.setPreferredSize(new Dimension(500, 300)); // Set a fixed size for consistency
+        panel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center-align the panel within the main panel
+        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS)); // Keep vertical alignment
+        panel.setMaximumSize(new Dimension(500, 600)); // Allow a max size but prevent it from becoming too large
     }
 }

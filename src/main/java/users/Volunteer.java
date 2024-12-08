@@ -109,7 +109,7 @@ public class Volunteer extends User {
         return requests;
     }
 
-    // Method to allow the volunteer to choose which request to handle
+    // Method to allow the volunteer to choose which request to handle (for terminal testing)
     public void chooseRequest(Scanner scanner){
         try {
             List<Request> liste = seeAllRequests();
@@ -134,6 +134,7 @@ public class Volunteer extends User {
         }
     }
 
+    // Method to let the Volunteer accept a request made by a Client (for UI testing)
     public void acceptRequest(Request request){
         request.setIdDestination(getId());
         request.setStatus(Status.ACCEPTED);

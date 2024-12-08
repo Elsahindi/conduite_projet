@@ -11,27 +11,33 @@ import java.util.List;
 
 public class ClientPanel extends JPanel {
 
-    private JButton seeRequests;
-    private JButton makeRequest;
     private JButton sendRequests;
+    private JButton backButton;
+    private JTextField makeRequestMessage;
 
     public ClientPanel(Client client) {
-        // Set a BoxLayout to arrange components vertically with some spacing
+
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-        // Initialize the buttons and add them to the panel
-        seeRequests = new JButton("See Requests");
-        makeRequest = new JButton("Make Request");
 
-        // Add buttons with some space between them
+        JButton seeRequests = new JButton("See Requests");
+        JButton makeRequest = new JButton("Make Request");
+
+
         this.add(seeRequests);
-        this.add(Box.createVerticalStrut(30)); // Add vertical spacing
+        this.add(Box.createVerticalStrut(30));
         this.add(makeRequest);
-        this.add(Box.createVerticalStrut(20)); // Add more space before actions
+        this.add(Box.createVerticalStrut(20));
 
-        // Action for 'See Requests' button
+        JPanel requestsPanel = new JPanel();
+        requestsPanel.setLayout(new BoxLayout(requestsPanel, BoxLayout.Y_AXIS)); // Stack the requests vertically
+        this.add(requestsPanel);
+        JScrollPane scrollPane = new JScrollPane(requestsPanel);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); // Always show vertical scrollbar
+        this.add(scrollPane); // Add the scrollPane to the panel
+
         seeRequests.addActionListener(e -> {
-            this.removeAll(); // Clear previous components
+            this.removeAll();
             List<Request> requests;
             try {
                 requests = client.getRequests();
@@ -43,40 +49,58 @@ public class ClientPanel extends JPanel {
                 throw new RuntimeException(ex);
             }
 
+            addBackButton(client);
+
             this.revalidate();
             this.repaint();
         });
 
-        // Action for 'Make Request' button
+
         makeRequest.addActionListener(e -> {
-            // Clear any existing components before adding new ones
+
             this.removeAll();
 
-            // Create a label and text field for making a request
             JLabel makeRequestLabel = new JLabel("Please write your request here: ");
-            makeRequestLabel.setAlignmentX(Component.CENTER_ALIGNMENT); // Center the label
+            makeRequestLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-            JTextField makeRequestMessage = new JTextField(20); // Text field for request message
-            makeRequestMessage.setMaximumSize(makeRequestMessage.getPreferredSize()); // Set max size for text field
+            makeRequestMessage = new JTextField(20);
+            makeRequestMessage.setMaximumSize(makeRequestMessage.getPreferredSize());
 
             sendRequests = new JButton("Send");
 
-            // Add borders for better spacing
+
             makeRequestLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
             makeRequestMessage.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
             sendRequests.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-            // Add components with appropriate vertical spacing
+
             this.add(makeRequestLabel);
-            this.add(Box.createVerticalStrut(10)); // Space between label and text field
+            this.add(Box.createVerticalStrut(10));
             this.add(makeRequestMessage);
-            this.add(Box.createVerticalStrut(10)); // Space between text field and button
+            this.add(Box.createVerticalStrut(10));
             this.add(sendRequests);
 
-            // Action for 'Send' button
+
+            addBackButton(client);
+
+
             sendRequests.addActionListener(ex -> {
                 try {
+
                     Client.sendRequest(client.getId(), makeRequestMessage.getText(), client.getFacility());
+
+
+                    makeRequestMessage.setVisible(false);
+                    sendRequests.setVisible(false);
+                    JLabel messageSentLabel = new JLabel("Request Sent");
+                    messageSentLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    messageSentLabel.setForeground(Color.GREEN);
+                    this.add(messageSentLabel);
+                    this.revalidate();
+                    this.repaint();
+
+                    addBackButton(client);
+
                 } catch (SQLException exc) {
                     throw new RuntimeException(exc);
                 }
@@ -86,8 +110,105 @@ public class ClientPanel extends JPanel {
             this.repaint();
         });
 
-        // Add margins around the whole panel
-        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20)); // Top, Left, Bottom, Right margins
 
+        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+    }
+
+    private void addBackButton(Client client) {
+
+        if (backButton != null) {
+            this.remove(backButton);
+        }
+
+        backButton = new JButton("Back");
+        backButton.addActionListener(e -> {
+            this.removeAll();
+            initializeMainButtons(client);
+            this.revalidate();
+            this.repaint();
+        });
+        this.add(backButton);
+    }
+
+    private void initializeMainButtons(Client client) {
+        JButton seeRequests = new JButton("See Requests");
+        JButton makeRequest = new JButton("Make Request");
+
+
+        this.add(seeRequests);
+        this.add(Box.createVerticalStrut(30));
+        this.add(makeRequest);
+        this.add(Box.createVerticalStrut(20));
+
+
+        seeRequests.addActionListener(e -> {
+            this.removeAll();
+            List<Request> requests;
+            try {
+                requests = client.getRequests();
+                for (Request request : requests) {
+                    RequestClientComponent r = new RequestClientComponent(request, client);
+                    this.add(r);
+                }
+            } catch (SQLException ex) {
+                throw new RuntimeException(ex);
+            }
+
+            addBackButton(client);
+
+            this.revalidate();
+            this.repaint();
+        });
+
+        makeRequest.addActionListener(e -> {
+            this.removeAll();
+            JLabel makeRequestLabel = new JLabel("Please write your request here: ");
+            makeRequestLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            makeRequestMessage = new JTextField(20);
+            makeRequestMessage.setMaximumSize(makeRequestMessage.getPreferredSize());
+
+            sendRequests = new JButton("Send");
+
+
+            makeRequestLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            makeRequestMessage.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            sendRequests.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+
+            this.add(makeRequestLabel);
+            this.add(Box.createVerticalStrut(10));
+            this.add(makeRequestMessage);
+            this.add(Box.createVerticalStrut(10));
+            this.add(sendRequests);
+
+
+            addBackButton(client);
+
+            sendRequests.addActionListener(ex -> {
+                try {
+                    Client.sendRequest(client.getId(), makeRequestMessage.getText(), client.getFacility());
+
+                    makeRequestMessage.setVisible(false);
+                    sendRequests.setVisible(false);
+                    JLabel messageSentLabel = new JLabel("Message Sent");
+                    messageSentLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    messageSentLabel.setForeground(Color.GREEN);
+                    this.add(messageSentLabel);
+                    this.revalidate();
+                    this.repaint();
+
+                    addBackButton(client);
+
+                } catch (SQLException exc) {
+                    throw new RuntimeException(exc);
+                }
+            });
+
+            this.revalidate();
+            this.repaint();
+        });
+
+        setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
     }
 }

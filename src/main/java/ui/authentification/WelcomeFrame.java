@@ -17,6 +17,7 @@ public class WelcomeFrame extends JFrame {
         super("Welcome to the request service.");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(400, 400);
+        this.setLocationRelativeTo(null);
 
         panel1 = new JPanel();
         panel1.setLayout(new BorderLayout());

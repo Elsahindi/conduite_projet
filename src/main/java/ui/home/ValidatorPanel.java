@@ -12,8 +12,7 @@ import java.util.List;
 public class ValidatorPanel extends JPanel {
 
     private JButton seeRequests;
-    private JButton backButton;
-    private Validator validator;
+    private final Validator validator;
 
     public ValidatorPanel(Validator validator) {
         this.validator = validator;
@@ -25,13 +24,21 @@ public class ValidatorPanel extends JPanel {
         try {
             requests = validator.getRequests();
 
+            JPanel requestsPanel = new JPanel();
+            requestsPanel.setLayout(new BoxLayout(requestsPanel, BoxLayout.Y_AXIS));
+
             for (Request request : requests) {
-                RequestValidatorComponent r = new RequestValidatorComponent(this,request, validator);
+                RequestValidatorComponent r = new RequestValidatorComponent(this, request, validator);
                 r.setMaximumSize(new Dimension(Integer.MAX_VALUE, 150));
-                this.add(r);
+                requestsPanel.add(r);
             }
 
-            backButton = new JButton("Back");
+            JScrollPane scrollPane = new JScrollPane(requestsPanel);
+            scrollPane.setPreferredSize(new Dimension(600, 400));
+            this.add(scrollPane, BorderLayout.CENTER);
+
+            JButton backButton = new JButton("Back");
+            backButton.setAlignmentX(Component.CENTER_ALIGNMENT);
             this.add(backButton);
 
             backButton.addActionListener(e -> {
@@ -45,7 +52,6 @@ public class ValidatorPanel extends JPanel {
         } catch (SQLException exception) {
             throw new RuntimeException(exception);
         }
-
 
         this.revalidate();
         this.repaint();
