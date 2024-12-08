@@ -2,6 +2,7 @@ package ui.home;
 
 import request.Request;
 import ui.request.RequestValidatorComponent;
+import ui.review.ReviewComponent;
 import users.Validator;
 
 import javax.swing.*;
@@ -47,6 +48,9 @@ public class ValidatorPanel extends JPanel {
                 this.add(seeRequests);
                 this.revalidate();
                 this.repaint();
+
+                ReviewComponent reviewComponent = new ReviewComponent(validator);
+                this.add(reviewComponent);
             });
 
         } catch (SQLException exception) {
@@ -64,6 +68,7 @@ public class ValidatorPanel extends JPanel {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         seeRequests = new JButton("See Requests");
+        seeRequests.setAlignmentX(Component.CENTER_ALIGNMENT);
         this.add(seeRequests);
 
         seeRequests.addActionListener(e -> {
@@ -71,5 +76,6 @@ public class ValidatorPanel extends JPanel {
             showRequests(validator);
         });
         this.setVisible(true);
+
     }
 }

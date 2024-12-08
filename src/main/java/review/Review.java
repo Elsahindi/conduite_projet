@@ -74,10 +74,10 @@ public class Review {
             } else {
                 try (PreparedStatement updateStatement = DatabaseCreation.getInstance().getConnection()
                         .prepareStatement("INSERT INTO review (idReview, idAuthor, title, content)  VALUES (?, ?, ?, ?)")){
-                    updateStatement.setString(1,idAuthor);
-                    updateStatement.setString(2,title);
-                    updateStatement.setString(3,content);
-                    updateStatement.setInt(4,idReview);
+                    updateStatement.setInt(1,idReview);
+                    updateStatement.setString(2,idAuthor);
+                    updateStatement.setString(3,title);
+                    updateStatement.setString(4,content);
                     updateStatement.executeUpdate();}
             }
         } catch (SQLException e) {

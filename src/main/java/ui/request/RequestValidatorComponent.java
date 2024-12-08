@@ -2,6 +2,7 @@ package ui.request;
 
 import request.Request;
 import ui.home.ValidatorPanel;
+import ui.review.ReviewComponent;
 import users.Validator;
 
 import javax.swing.*;
@@ -62,5 +63,7 @@ public class RequestValidatorComponent extends JPanel {
         });
 
         this.add(Box.createVerticalStrut(10));
+
+        this.setVisible(true);
     }
 }

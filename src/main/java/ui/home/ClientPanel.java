@@ -1,6 +1,7 @@
 package ui.home;
 
 import ui.request.RequestClientComponent;
+import ui.review.ReviewComponent;
 import users.Client;
 import request.Request;
 
@@ -64,7 +65,7 @@ public class ClientPanel extends JPanel {
             makeRequestLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
             makeRequestMessage = new JTextField(20);
-            makeRequestMessage.setMaximumSize(makeRequestMessage.getPreferredSize());
+            makeRequestMessage.setMaximumSize(new Dimension(200,50));
 
             sendRequests = new JButton("Send");
 
@@ -166,7 +167,7 @@ public class ClientPanel extends JPanel {
             makeRequestLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
             makeRequestMessage = new JTextField(20);
-            makeRequestMessage.setMaximumSize(makeRequestMessage.getPreferredSize());
+            makeRequestMessage.setMaximumSize(new Dimension(200,50));
 
             sendRequests = new JButton("Send");
 
@@ -209,6 +210,8 @@ public class ClientPanel extends JPanel {
             this.repaint();
         });
 
+        ReviewComponent reviewComponent = new ReviewComponent(client);
+        this.add(reviewComponent);
         setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
     }
 }

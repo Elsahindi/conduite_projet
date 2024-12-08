@@ -3,6 +3,7 @@ package ui.home;
 import request.Request;
 import request.Status;
 import ui.request.RequestVolunteerComponent;
+import ui.review.ReviewComponent;
 import users.Volunteer;
 
 import javax.swing.*;
@@ -38,6 +39,9 @@ public class VolunteerPanel extends JPanel {
         JScrollPane scrollPane = new JScrollPane(requestsPanel);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS); // Always show vertical scrollbar
         this.add(scrollPane); // Add the scrollPane to the panel
+
+        ReviewComponent reviewComponent = new ReviewComponent(volunteer);
+        this.add(reviewComponent);
 
         // Action when "My Requests" is clicked
         seeRequests.addActionListener(e -> {

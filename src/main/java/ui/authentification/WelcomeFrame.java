@@ -7,19 +7,13 @@ import java.awt.event.ActionListener;
 
 public class WelcomeFrame extends JFrame {
 
-    private JPanel panel1;
-
-    private JButton createAnAccountButton;
-
-    private JButton registerButton;
-
     public WelcomeFrame() {
         super("Welcome to the request service.");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(400, 400);
         this.setLocationRelativeTo(null);
 
-        panel1 = new JPanel();
+        JPanel panel1 = new JPanel();
         panel1.setLayout(new BorderLayout());
 
         // Welcome Label
@@ -36,12 +30,12 @@ public class WelcomeFrame extends JFrame {
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
 
         // Create Account Button
-        createAnAccountButton = new JButton("Create an Account");
+        JButton createAnAccountButton = new JButton("Create an Account");
         createAnAccountButton.setPreferredSize(new Dimension(150, 40));
         buttonPanel.add(createAnAccountButton);
 
         // Register Button
-        registerButton = new JButton("Login");
+        JButton registerButton = new JButton("Login");
         registerButton.setPreferredSize(new Dimension(150, 40));
         buttonPanel.add(registerButton);
 
@@ -69,11 +63,10 @@ public class WelcomeFrame extends JFrame {
 
         // Create a custom JDialog
         JDialog createAccountDialog = new JDialog(this, "Create Account", true);
-        createAccountDialog.setContentPane(createAccountPanel); // Set the content to the CreateAccountPanel
-        createAccountDialog.setSize(400, 400); // Set the size of the dialog
-        createAccountDialog.setLocationRelativeTo(this); // Center it relative to the main frame
+        createAccountDialog.setContentPane(createAccountPanel);
+        createAccountDialog.setSize(400, 400);
+        createAccountDialog.setLocationRelativeTo(this);
 
-        // Make the dialog visible
         createAccountDialog.setVisible(true);
     }
 
